@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flixorax</title>
+<title>Flixora</title>
 
 <style>
 body{margin:0;background:#000;color:#fff;font-family:Arial}
@@ -74,16 +74,14 @@ margin-top:10px;
 
 <script>
 
-/* 🟢 YOUR VERCEL API BASE */
 const BASE = "https://movieflix-v2-xi.vercel.app";
 
-/* 🟢 STATE */
 let page = 1;
 let loading = false;
 let allData = [];
 
 /* =========================
-   🟢 LOAD MOVIES (UNLIMITED)
+   🟢 LOAD MOVIES
 ========================= */
 async function loadMovies(){
 
@@ -102,7 +100,7 @@ async function loadMovies(){
 }
 
 /* =========================
-   🟢 LOAD TV SHOWS
+   🟢 LOAD TV
 ========================= */
 async function loadTV(){
 
@@ -115,7 +113,15 @@ async function loadTV(){
 }
 
 /* =========================
-   🟢 RENDER UI
+   🟢 WATCH NOW (NEW FEATURE)
+========================= */
+function openWatch(title){
+  const url = `https://www.youtube.com/results?search_query=${title}+full+movie`;
+  window.open(url, "_blank");
+}
+
+/* =========================
+   🟢 RENDER UI (UPDATED)
 ========================= */
 function render(list){
 
@@ -124,16 +130,20 @@ function render(list){
 
   list.forEach(item=>{
     grid.innerHTML += `
-      <div class="card" onclick="openTrailer(${item.id})">
+      <div class="card">
         <img src="https://image.tmdb.org/t/p/w500${item.poster_path}">
         <p>${item.title || item.name}</p>
+
+        <button onclick="openWatch('${item.title || item.name}')">
+          ▶ Watch Now
+        </button>
       </div>
     `;
   });
 }
 
 /* =========================
-   🟢 TRAILER OPEN
+   🟢 TRAILER (OPTIONAL KEEP)
 ========================= */
 async function openTrailer(id){
 
@@ -155,34 +165,26 @@ async function openTrailer(id){
   document.getElementById("modal").style.display = "flex";
 }
 
-/* =========================
-   🟢 CLOSE MODAL
-========================= */
+/* CLOSE */
 function closeModal(){
   document.getElementById("modal").style.display = "none";
   document.getElementById("video").innerHTML = "";
 }
 
-/* =========================
-   🟢 SEARCH SYSTEM
-========================= */
+/* SEARCH */
 document.getElementById("search").addEventListener("input",(e)=>{
   const v = e.target.value.toLowerCase();
   render(allData.filter(i=>(i.title||i.name).toLowerCase().includes(v)));
 });
 
-/* =========================
-   🟢 INFINITE SCROLL
-========================= */
+/* INFINITE SCROLL */
 window.addEventListener("scroll", ()=>{
   if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 500){
     loadMovies();
   }
 });
 
-/* =========================
-   🟢 START APP
-========================= */
+/* START */
 loadMovies();
 
 </script>
