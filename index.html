@@ -55,29 +55,41 @@ font-size:14px;
 
 <script>
 
-const API = "https://YOUR-VERCEL-URL.vercel.app/api/movies?type=popular";
+  const API = "https://movieflix-v2-xi.vercel.app/api/movies?type=popular";
 
 async function loadMovies(){
+try {
 const res = await fetch(API);
 const data = await res.json();
 
 const container = document.getElementById("movies");
 container.innerHTML = "";
 
+if(!data.results) return;
+
 data.results.forEach(movie => {
+
+const poster = movie.poster_path
+? "https://image.tmdb.org/t/p/w500" + movie.poster_path
+: "https://via.placeholder.com/300x450";
 
 container.innerHTML += `
 <div class="card">
-<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}">
+<img src="${poster}">
 <p>${movie.title}</p>
 </div>
 `;
 
 });
 
+} catch(err){
+console.log("Error loading movies", err);
+}
 }
 
 loadMovies();
+
+
 
 </script>
 
