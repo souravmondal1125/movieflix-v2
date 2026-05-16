@@ -4,8 +4,8 @@ export default async function handler(req, res) {
 
   const url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`;
 
-  const response = await fetch(url);
-  const data = await response.json();
+  const r = await fetch(url);
+  const data = await r.json();
 
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.status(200).json(data);
