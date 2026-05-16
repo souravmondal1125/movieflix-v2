@@ -67,6 +67,18 @@ const BASE = "https://movieflix-v2-xi.vercel.app";
 
 let allData = [];
 
+  let page = 1;
+
+async function loadMovies(){
+  const res = await fetch(`${BASE}/api/movies?page=${page}`);
+  const data = await res.json();
+
+  allData = [...allData, ...data.results];
+  render(allData);
+
+  page++;
+}
+
 /* MOVIES */
 async function loadMovies(){
 const res = await fetch(`${BASE}/api/movies`);
