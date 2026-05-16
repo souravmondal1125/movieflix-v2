@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MovieFlix Pro</title>
+<title>MovieFlix Unlimited</title>
 
 <style>
 body{margin:0;background:#000;color:#fff;font-family:Arial}
 
-/* HERO */
 .hero{
 height:60vh;
 background-size:cover;
@@ -19,12 +18,11 @@ padding:40px;
 }
 
 #hero-title{
-font-size:40px;
+font-size:35px;
 background:rgba(0,0,0,0.5);
 padding:10px;
 }
 
-/* GRID */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
@@ -36,50 +34,10 @@ padding:20px;
 background:#111;
 border-radius:10px;
 overflow:hidden;
-cursor:pointer;
-transition:0.3s;
-position:relative;
 }
-
-.card:hover{transform:scale(1.05)}
 
 .card img{width:100%}
 .card p{padding:5px}
-
-/* ❤️ button */
-.card button{
-position:absolute;
-top:5px;
-right:5px;
-background:red;
-border:none;
-color:#fff;
-border-radius:50%;
-width:30px;
-height:30px;
-cursor:pointer;
-}
-
-/* MODAL */
-.modal{
-display:none;
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,0.9);
-justify-content:center;
-align-items:center;
-flex-direction:column;
-}
-
-button.close{
-background:red;
-color:#fff;
-border:none;
-padding:10px;
-cursor:pointer;
-margin-top:10px;
-}
 </style>
 </head>
 
@@ -91,126 +49,79 @@ margin-top:10px;
 
 <div class="grid" id="grid"></div>
 
-<div class="modal" id="modal">
-<div id="video"></div>
-<button class="close" onclick="closeModal()">Close</button>
-</div>
-
 <script>
 
-/* 🔥 YOUR VERCEL LINK */
 const BASE = "https://movieflix-v2-xi.vercel.app";
 
-/* DATA */
 let allData = [];
-let heroIndex = 0;
+let page = 1;
+let loading = false;
 
-/* ================= HERO SLIDER ================= */
+/* HERO */
 function startHeroSlider(list){
-  if(!list.length) return;
+  let i = 0;
 
   setInterval(()=>{
-    const movie = list[heroIndex];
+    const m = list[i];
 
-    if(movie.backdrop_path){
+    if(m?.backdrop_path){
       document.getElementById("hero").style.backgroundImage =
-      `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
+      `url(https://image.tmdb.org/t/p/original${m.backdrop_path})`;
+
+      document.getElementById("hero-title").innerText =
+      m.title || m.name;
     }
 
-    document.getElementById("hero-title").innerText =
-    movie.title || movie.name;
-
-    heroIndex++;
-    if(heroIndex >= list.length) heroIndex = 0;
+    i++;
+    if(i >= list.length) i = 0;
 
   }, 4000);
 }
 
-/* ================= WATCHLIST ================= */
-let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+/* LOAD MORE (UNLIMITED) */
+async function loadMore(){
+  if(loading) return;
+  loading = true;
 
-function toggleWatchlist(id, title){
-  const index = watchlist.findIndex(i => i.id === id);
+  const res = await fetch(`${BASE}/api/movies?page=${page}`);
+  const data = await res.json();
 
-  if(index === -1){
-    watchlist.push({id, title});
-  } else {
-    watchlist.splice(index, 1);
+  allData = [...allData, ...(data.results || [])];
+
+  render(allData);
+
+  if(page === 1){
+    startHeroSlider(allData);
   }
 
-  localStorage.setItem("watchlist", JSON.stringify(watchlist));
+  page++;
+  loading = false;
 }
 
-/* ================= LOAD MOVIES ================= */
-async function loadMovies(type="popular"){
-  const res = await fetch(`${BASE}/api/movies?type=${type}`);
-  const data = await res.json();
-
-  allData = data.results || [];
-  render(allData);
-
-  startHeroSlider(allData);
-}
-
-/* ================= LOAD TV ================= */
-async function loadTV(){
-  const res = await fetch(`${BASE}/api/tv?type=popular`);
-  const data = await res.json();
-
-  allData = data.results || [];
-  render(allData);
-
-  startHeroSlider(allData);
-}
-
-/* ================= RENDER ================= */
+/* RENDER */
 function render(list){
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
 
   list.forEach(item=>{
-
-    const img = item.poster_path
-    ? "https://image.tmdb.org/t/p/w500"+item.poster_path
-    : "https://via.placeholder.com/300";
-
     grid.innerHTML += `
-      <div class="card" onclick="openTrailer(${item.id})">
-        <button onclick="event.stopPropagation(); toggleWatchlist(${item.id}, '${item.title || item.name}')">❤️</button>
-        <img src="${img}">
+      <div class="card">
+        <img src="https://image.tmdb.org/t/p/w500${item.poster_path}">
         <p>${item.title || item.name}</p>
       </div>
     `;
   });
 }
 
-/* ================= TRAILER ================= */
-async function openTrailer(id){
-  const res = await fetch(`${BASE}/api/trailer?id=${id}`);
-  const data = await res.json();
-
-  const key = data.results?.[0]?.key;
-
-  if(!key){
-    alert("Trailer not found");
-    return;
+/* INFINITE SCROLL */
+window.addEventListener("scroll", ()=>{
+  if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 500){
+    loadMore();
   }
+});
 
-  document.getElementById("video").innerHTML =
-  `<iframe width="80%" height="400"
-  src="https://www.youtube.com/embed/${key}"
-  frameborder="0" allowfullscreen></iframe>`;
-
-  document.getElementById("modal").style.display = "flex";
-}
-
-function closeModal(){
-  document.getElementById("modal").style.display = "none";
-  document.getElementById("video").innerHTML = "";
-}
-
-/* ================= START ================= */
-loadMovies("popular");
+/* START */
+loadMore();
 
 </script>
 
