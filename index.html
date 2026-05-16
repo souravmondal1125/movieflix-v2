@@ -45,7 +45,7 @@ button{background:red;color:#fff;border:none;padding:8px}
 <body>
 
 <header>
-<div class="logo">NETFLIX PRO</div>
+<div class="logo">Moviehub</div>
 <input id="search" placeholder="Search...">
 </header>
 
@@ -65,81 +65,80 @@ button{background:red;color:#fff;border:none;padding:8px}
 
 const BASE = "https://movieflix-v2-xi.vercel.app";
 
+let page = 1;
+let loading = false;
 let allData = [];
 
-  let page = 1;
-
+/* 🟢 LOAD MOVIES (UNLIMITED) */
 async function loadMovies(){
+  if(loading) return;
+  loading = true;
+
   const res = await fetch(`${BASE}/api/movies?page=${page}`);
   const data = await res.json();
 
   allData = [...allData, ...data.results];
+
   render(allData);
 
   page++;
+  loading = false;
 }
 
-/* MOVIES */
-async function loadMovies(){
-const res = await fetch(`${BASE}/api/movies`);
-const data = await res.json();
-
-allData = data.results || [];
-render(allData);
-}
-
-/* TV */
+/* 🟢 TV SHOWS */
 async function loadTV(){
-const res = await fetch(`${BASE}/api/tv`);
-const data = await res.json();
+  const res = await fetch(`${BASE}/api/tv?page=1`);
+  const data = await res.json();
 
-allData = data.results || [];
-render(allData);
+  allData = data.results || [];
+  render(allData);
 }
 
-/* RENDER */
+/* 🟢 RENDER */
 function render(list){
-const grid = document.getElementById("grid");
-grid.innerHTML = "";
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
 
-list.forEach(item=>{
-grid.innerHTML += `
-<div class="card" onclick="openTrailer(${item.id})">
-<img src="https://image.tmdb.org/t/p/w500${item.poster_path}">
-<p>${item.title || item.name}</p>
-</div>
-`;
-});
+  list.forEach(item=>{
+    grid.innerHTML += `
+      <div class="card" onclick="openTrailer(${item.id})">
+        <img src="https://image.tmdb.org/t/p/w500${item.poster_path}">
+        <p>${item.title || item.name}</p>
+      </div>
+    `;
+  });
 }
 
-/* TRAILER */
+/* 🟢 TRAILER */
 async function openTrailer(id){
-const res = await fetch(`${BASE}/api/trailer?id=${id}`);
-const data = await res.json();
+  const res = await fetch(`${BASE}/api/trailer?id=${id}`);
+  const data = await res.json();
 
-const key = data.results?.[0]?.key;
+  const key = data.results?.[0]?.key;
 
-if(!key) return alert("Trailer not found");
+  if(!key) return alert("Trailer not found");
 
-document.getElementById("video").innerHTML =
-`<iframe width="90%" height="400"
-src="https://www.youtube.com/embed/${key}" frameborder="0" allowfullscreen></iframe>`;
+  document.getElementById("video").innerHTML =
+    `<iframe width="90%" height="400"
+    src="https://www.youtube.com/embed/${key}"
+    frameborder="0" allowfullscreen></iframe>`;
 
-document.getElementById("modal").style.display="flex";
+  document.getElementById("modal").style.display = "flex";
 }
 
+/* 🟢 CLOSE */
 function closeModal(){
-document.getElementById("modal").style.display="none";
-document.getElementById("video").innerHTML="";
+  document.getElementById("modal").style.display = "none";
+  document.getElementById("video").innerHTML = "";
 }
 
-/* SEARCH */
+/* 🟢 SEARCH */
 document.getElementById("search").addEventListener("input",(e)=>{
-const v = e.target.value.toLowerCase();
-render(allData.filter(i=>(i.title||i.name).toLowerCase().includes(v)));
+  const v = e.target.value.toLowerCase();
+  render(allData.filter(i => (i.title||i.name).toLowerCase().includes(v)));
 });
 
-/* START */
+/* 🟢 START */
 loadMovies();
 
 </script>
