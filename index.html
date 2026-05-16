@@ -19,7 +19,7 @@ position:sticky;top:0;
 input{padding:8px;width:200px;border:none;border-radius:5px}
 
 .tabs{text-align:center;padding:10px}
-.tabs button{margin:5px;padding:8px;background:#222;color:#fff;border:none}
+.tabs button{margin:5px;padding:8px;background:#222;color:#fff;border:none;cursor:pointer}
 
 .grid{
 display:grid;
@@ -32,20 +32,31 @@ gap:15px;padding:20px;
 .card p{padding:5px;font-size:14px}
 
 .modal{
-display:none;position:fixed;
-top:0;left:0;width:100%;height:100%;
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
 background:rgba(0,0,0,0.9);
-justify-content:center;align-items:center;flex-direction:column;
+justify-content:center;
+align-items:center;
+flex-direction:column;
 }
 
-button{background:red;color:#fff;border:none;padding:8px}
+button{
+background:red;
+color:#fff;
+border:none;
+padding:8px;
+cursor:pointer;
+margin-top:10px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<div class="logo">Moviehub</div>
+<div class="logo">NETFLIX PRO</div>
 <input id="search" placeholder="Search...">
 </header>
 
@@ -63,14 +74,19 @@ button{background:red;color:#fff;border:none;padding:8px}
 
 <script>
 
+/* 🟢 YOUR VERCEL API BASE */
 const BASE = "https://movieflix-v2-xi.vercel.app";
 
+/* 🟢 STATE */
 let page = 1;
 let loading = false;
 let allData = [];
 
-/* 🟢 LOAD MOVIES (UNLIMITED) */
+/* =========================
+   🟢 LOAD MOVIES (UNLIMITED)
+========================= */
 async function loadMovies(){
+
   if(loading) return;
   loading = true;
 
@@ -85,17 +101,24 @@ async function loadMovies(){
   loading = false;
 }
 
-/* 🟢 TV SHOWS */
+/* =========================
+   🟢 LOAD TV SHOWS
+========================= */
 async function loadTV(){
+
   const res = await fetch(`${BASE}/api/tv?page=1`);
   const data = await res.json();
 
   allData = data.results || [];
+
   render(allData);
 }
 
-/* 🟢 RENDER */
+/* =========================
+   🟢 RENDER UI
+========================= */
 function render(list){
+
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
 
@@ -109,36 +132,57 @@ function render(list){
   });
 }
 
-/* 🟢 TRAILER */
+/* =========================
+   🟢 TRAILER OPEN
+========================= */
 async function openTrailer(id){
+
   const res = await fetch(`${BASE}/api/trailer?id=${id}`);
   const data = await res.json();
 
   const key = data.results?.[0]?.key;
 
-  if(!key) return alert("Trailer not found");
+  if(!key){
+    alert("Trailer not found");
+    return;
+  }
 
   document.getElementById("video").innerHTML =
-    `<iframe width="90%" height="400"
-    src="https://www.youtube.com/embed/${key}"
-    frameborder="0" allowfullscreen></iframe>`;
+  `<iframe width="90%" height="400"
+  src="https://www.youtube.com/embed/${key}"
+  frameborder="0" allowfullscreen></iframe>`;
 
   document.getElementById("modal").style.display = "flex";
 }
 
-/* 🟢 CLOSE */
+/* =========================
+   🟢 CLOSE MODAL
+========================= */
 function closeModal(){
   document.getElementById("modal").style.display = "none";
   document.getElementById("video").innerHTML = "";
 }
 
-/* 🟢 SEARCH */
+/* =========================
+   🟢 SEARCH SYSTEM
+========================= */
 document.getElementById("search").addEventListener("input",(e)=>{
   const v = e.target.value.toLowerCase();
-  render(allData.filter(i => (i.title||i.name).toLowerCase().includes(v)));
+  render(allData.filter(i=>(i.title||i.name).toLowerCase().includes(v)));
 });
 
-/* 🟢 START */
+/* =========================
+   🟢 INFINITE SCROLL
+========================= */
+window.addEventListener("scroll", ()=>{
+  if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 500){
+    loadMovies();
+  }
+});
+
+/* =========================
+   🟢 START APP
+========================= */
 loadMovies();
 
 </script>
