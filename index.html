@@ -2,40 +2,79 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MovieFlix</title>
 
 <style>
 body{
 margin:0;
-background:#000;
-color:#fff;
+background:#0b0b0f;
+color:white;
 font-family:Arial;
 }
 
+/* HEADER */
 header{
-padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 20px;
 background:#111;
-text-align:center;
-font-size:24px;
-color:red;
+position:sticky;
+top:0;
+z-index:1000;
 }
 
+.logo{
+font-size:26px;
+color:red;
+font-weight:bold;
+}
+
+input{
+padding:8px;
+border:none;
+border-radius:5px;
+outline:none;
+width:200px;
+}
+
+/* HERO */
+.hero{
+height:60vh;
+background:url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba') center/cover;
+display:flex;
+align-items:flex-end;
+padding:30px;
+}
+
+.hero h1{
+font-size:40px;
+}
+
+/* GRID */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-gap:10px;
-padding:10px;
+grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+gap:15px;
+padding:20px;
 }
 
 .card{
-background:#111;
+background:#1a1a1a;
 border-radius:10px;
 overflow:hidden;
+cursor:pointer;
+transition:0.3s;
+}
+
+.card:hover{
+transform:scale(1.05);
 }
 
 .card img{
 width:100%;
-height:220px;
+height:240px;
 object-fit:cover;
 }
 
@@ -43,53 +82,115 @@ object-fit:cover;
 padding:8px;
 font-size:14px;
 }
+
+/* MODAL */
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+justify-content:center;
+align-items:center;
+}
+
+.modal-content{
+background:#111;
+padding:20px;
+border-radius:10px;
+max-width:400px;
+text-align:center;
+}
+
+button{
+background:red;
+border:none;
+padding:8px 15px;
+color:white;
+cursor:pointer;
+margin-top:10px;
+border-radius:5px;
+}
 </style>
 
 </head>
 
 <body>
 
-<header>🎬 MovieFlix</header>
+<header>
+<div class="logo">MovieFlix</div>
+<input type="text" id="search" placeholder="Search movie...">
+</header>
+
+<div class="hero">
+<h1>Unlimited Movies 🎬</h1>
+</div>
 
 <div class="grid" id="movies"></div>
 
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<h2 id="title"></h2>
+<p id="desc"></p>
+<button onclick="closeModal()">Close</button>
+</div>
+</div>
+
 <script>
 
-  const API = "https://movieflix-v2-xi.vercel.app/api/movies?type=popular";
+const API = "https://movieflix-v2-xi.vercel.app/api/movies?type=popular";
+
+let allMovies = [];
 
 async function loadMovies(){
-try {
 const res = await fetch(API);
 const data = await res.json();
 
+allMovies = data.results || [];
+showMovies(allMovies);
+}
+
+function showMovies(movies){
 const container = document.getElementById("movies");
 container.innerHTML = "";
 
-if(!data.results) return;
+movies.forEach(movie => {
 
-data.results.forEach(movie => {
-
-const poster = movie.poster_path
+const img = movie.poster_path
 ? "https://image.tmdb.org/t/p/w500" + movie.poster_path
-: "https://via.placeholder.com/300x450";
+: "https://via.placeholder.com/300";
 
 container.innerHTML += `
-<div class="card">
-<img src="${poster}">
+<div class="card" onclick="openModal('${movie.title}','${movie.overview}')">
+<img src="${img}">
 <p>${movie.title}</p>
 </div>
 `;
+});
+}
 
+/* SEARCH */
+document.getElementById("search").addEventListener("input", e=>{
+const value = e.target.value.toLowerCase();
+const filtered = allMovies.filter(m => m.title.toLowerCase().includes(value));
+showMovies(filtered);
 });
 
-} catch(err){
-console.log("Error loading movies", err);
+/* MODAL */
+function openModal(title, desc){
+document.getElementById("title").innerText = title;
+document.getElementById("desc").innerText = desc;
+document.getElementById("modal").style.display = "flex";
 }
+
+function closeModal(){
+document.getElementById("modal").style.display = "none";
 }
 
 loadMovies();
-
-
 
 </script>
 
