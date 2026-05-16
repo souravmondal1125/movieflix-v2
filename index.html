@@ -3,128 +3,214 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MovieFlix</title>
+<title>MovieFlix Pro</title>
 
 <style>
 body{margin:0;background:#000;color:#fff;font-family:Arial}
 
-header{
-display:flex;justify-content:space-between;
-padding:15px;background:#111;position:sticky;top:0;
+/* HERO */
+.hero{
+height:60vh;
+background-size:cover;
+background-position:center;
+display:flex;
+align-items:flex-end;
+padding:40px;
 }
 
-.logo{color:red;font-size:24px;font-weight:bold}
+#hero-title{
+font-size:40px;
+background:rgba(0,0,0,0.5);
+padding:10px;
+}
 
-input{padding:8px;width:200px;border-radius:5px;border:none}
-
-.tabs{text-align:center;padding:10px}
-.tabs button{margin:5px;padding:8px 15px;cursor:pointer}
-
+/* GRID */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-gap:15px;padding:20px;
+gap:15px;
+padding:20px;
 }
 
-.card{background:#111;border-radius:10px;cursor:pointer;overflow:hidden}
+.card{
+background:#111;
+border-radius:10px;
+overflow:hidden;
+cursor:pointer;
+transition:0.3s;
+position:relative;
+}
+
+.card:hover{transform:scale(1.05)}
+
 .card img{width:100%}
-.card p{padding:5px;font-size:14px}
+.card p{padding:5px}
 
+/* ❤️ button */
+.card button{
+position:absolute;
+top:5px;
+right:5px;
+background:red;
+border:none;
+color:#fff;
+border-radius:50%;
+width:30px;
+height:30px;
+cursor:pointer;
+}
+
+/* MODAL */
 .modal{
-display:none;position:fixed;top:0;left:0;
-width:100%;height:100%;background:rgba(0,0,0,0.8);
-justify-content:center;align-items:center;
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.9);
+justify-content:center;
+align-items:center;
+flex-direction:column;
 }
 
-.modal-box{
-background:#111;padding:20px;border-radius:10px;max-width:400px;
+button.close{
+background:red;
+color:#fff;
+border:none;
+padding:10px;
+cursor:pointer;
+margin-top:10px;
 }
-button{background:red;color:#fff;border:none;padding:8px;cursor:pointer}
 </style>
 </head>
 
 <body>
 
-<header>
-<div class="logo">MovieFlix</div>
-<input id="search" placeholder="Search...">
-</header>
-
-<div class="tabs">
-<button onclick="loadMovies()">Movies</button>
-<button onclick="loadSeries()">TV Series</button>
+<div class="hero" id="hero">
+<h1 id="hero-title"></h1>
 </div>
 
 <div class="grid" id="grid"></div>
 
 <div class="modal" id="modal">
-<div class="modal-box">
-<h2 id="title"></h2>
-<p id="desc"></p>
-<button onclick="closeModal()">Close</button>
-</div>
+<div id="video"></div>
+<button class="close" onclick="closeModal()">Close</button>
 </div>
 
 <script>
 
-const BASE_URL = "https://movieflix-v2-xi.vercel.app";
+/* 🔥 YOUR VERCEL LINK */
+const BASE = "https://movieflix-v2-xi.vercel.app";
 
-const MOVIE_API = BASE_URL + "/api/movies?type=popular";
-const TV_API = BASE_URL + "/api/tv?type=popular";
-
+/* DATA */
 let allData = [];
+let heroIndex = 0;
 
-async function loadMovies(){
-const res = await fetch(MOVIE_API);
-const data = await res.json();
-allData = data.results || [];
-render(allData);
+/* ================= HERO SLIDER ================= */
+function startHeroSlider(list){
+  if(!list.length) return;
+
+  setInterval(()=>{
+    const movie = list[heroIndex];
+
+    if(movie.backdrop_path){
+      document.getElementById("hero").style.backgroundImage =
+      `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
+    }
+
+    document.getElementById("hero-title").innerText =
+    movie.title || movie.name;
+
+    heroIndex++;
+    if(heroIndex >= list.length) heroIndex = 0;
+
+  }, 4000);
 }
 
-async function loadSeries(){
-const res = await fetch(TV_API);
-const data = await res.json();
-allData = data.results || [];
-render(allData);
+/* ================= WATCHLIST ================= */
+let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+
+function toggleWatchlist(id, title){
+  const index = watchlist.findIndex(i => i.id === id);
+
+  if(index === -1){
+    watchlist.push({id, title});
+  } else {
+    watchlist.splice(index, 1);
+  }
+
+  localStorage.setItem("watchlist", JSON.stringify(watchlist));
 }
 
+/* ================= LOAD MOVIES ================= */
+async function loadMovies(type="popular"){
+  const res = await fetch(`${BASE}/api/movies?type=${type}`);
+  const data = await res.json();
+
+  allData = data.results || [];
+  render(allData);
+
+  startHeroSlider(allData);
+}
+
+/* ================= LOAD TV ================= */
+async function loadTV(){
+  const res = await fetch(`${BASE}/api/tv?type=popular`);
+  const data = await res.json();
+
+  allData = data.results || [];
+  render(allData);
+
+  startHeroSlider(allData);
+}
+
+/* ================= RENDER ================= */
 function render(list){
-const grid = document.getElementById("grid");
-grid.innerHTML = "";
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
 
-list.forEach(item => {
+  list.forEach(item=>{
 
-const img = item.poster_path
-? "https://image.tmdb.org/t/p/w500"+item.poster_path
-: "https://via.placeholder.com/300";
+    const img = item.poster_path
+    ? "https://image.tmdb.org/t/p/w500"+item.poster_path
+    : "https://via.placeholder.com/300";
 
-grid.innerHTML += `
-<div class="card" onclick="openModal('${item.title || item.name}','${item.overview || "No description"}')">
-<img src="${img}">
-<p>${item.title || item.name}</p>
-</div>
-`;
-});
+    grid.innerHTML += `
+      <div class="card" onclick="openTrailer(${item.id})">
+        <button onclick="event.stopPropagation(); toggleWatchlist(${item.id}, '${item.title || item.name}')">❤️</button>
+        <img src="${img}">
+        <p>${item.title || item.name}</p>
+      </div>
+    `;
+  });
 }
 
-/* SEARCH */
-document.getElementById("search").addEventListener("input",(e)=>{
-const v = e.target.value.toLowerCase();
-render(allData.filter(i => (i.title||i.name).toLowerCase().includes(v)));
-});
+/* ================= TRAILER ================= */
+async function openTrailer(id){
+  const res = await fetch(`${BASE}/api/trailer?id=${id}`);
+  const data = await res.json();
 
-/* MODAL */
-function openModal(t,d){
-document.getElementById("title").innerText=t;
-document.getElementById("desc").innerText=d;
-document.getElementById("modal").style.display="flex";
+  const key = data.results?.[0]?.key;
+
+  if(!key){
+    alert("Trailer not found");
+    return;
+  }
+
+  document.getElementById("video").innerHTML =
+  `<iframe width="80%" height="400"
+  src="https://www.youtube.com/embed/${key}"
+  frameborder="0" allowfullscreen></iframe>`;
+
+  document.getElementById("modal").style.display = "flex";
 }
 
 function closeModal(){
-document.getElementById("modal").style.display="none";
+  document.getElementById("modal").style.display = "none";
+  document.getElementById("video").innerHTML = "";
 }
 
-loadMovies();
+/* ================= START ================= */
+loadMovies("popular");
 
 </script>
 
