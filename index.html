@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MovieFlix</title>
+
+<style>
+body{
+margin:0;
+background:#000;
+color:#fff;
+font-family:Arial;
+}
+
+header{
+padding:15px;
+background:#111;
+text-align:center;
+font-size:24px;
+color:red;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+gap:10px;
+padding:10px;
+}
+
+.card{
+background:#111;
+border-radius:10px;
+overflow:hidden;
+}
+
+.card img{
+width:100%;
+height:220px;
+object-fit:cover;
+}
+
+.card p{
+padding:8px;
+font-size:14px;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>🎬 MovieFlix</header>
+
+<div class="grid" id="movies"></div>
+
+<script>
+
+const API = "https://YOUR-VERCEL-URL.vercel.app/api/movies?type=popular";
+
+async function loadMovies(){
+const res = await fetch(API);
+const data = await res.json();
+
+const container = document.getElementById("movies");
+container.innerHTML = "";
+
+data.results.forEach(movie => {
+
+container.innerHTML += `
+<div class="card">
+<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}">
+<p>${movie.title}</p>
+</div>
+`;
+
+});
+
+}
+
+loadMovies();
+
+</script>
+
+</body>
+</html>
