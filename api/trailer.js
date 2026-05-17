@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   const id = req.query.id;
-  const apiKey = "4c63ed0d29a4da8c6f3386e07b8b4c56";
+  const apiKey = "9c8083df192467a734789e2838ce7bf1";
 
   const url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`;
 
