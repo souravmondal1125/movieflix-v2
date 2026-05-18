@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flixora</title>
 
-<!-- 🔥 POPUNDER + SOCIAL BAR (Adsterra) -->
+<!-- 🔥 POPUNDER + SOCIAL BAR (SAFE TOP LOAD) -->
 <script src="https://pl29472266.effectivecpmnetwork.com/c9/1c/46/c91c464dee4b553b50a9a1b15c04505e.js"></script>
 <script src="https://pl29477853.effectivecpmnetwork.com/9c/23/97/9c2397ced12f84d80e922389edf9b936.js"></script>
 
@@ -64,7 +64,7 @@ margin-top:10px;
 <input id="search" placeholder="Search...">
 </header>
 
-<!-- 🔥 BANNER 728x90 (TOP AREA) -->
+<!-- 🔥 BANNER 728x90 (SAFE POSITION) -->
 <div style="text-align:center;margin:10px 0;">
 <script>
   atOptions = {
@@ -83,7 +83,7 @@ margin-top:10px;
 <button onclick="loadTV()">TV Shows</button>
 </div>
 
-<!-- 🔥 BANNER 320x50 (MID AREA) -->
+<!-- 🔥 BANNER 320x50 (SAFE MID POSITION) -->
 <div style="text-align:center;margin:10px 0;">
 <script>
   atOptions = {
@@ -132,9 +132,7 @@ loading = false;
 async function loadTV(){
 const res = await fetch(`${BASE}/api/tv?page=1`);
 const data = await res.json();
-
 allData = data.results || [];
-
 render(allData);
 }
 
@@ -160,7 +158,8 @@ return;
 document.getElementById("video").innerHTML =
 `<iframe width="90%" height="400"
 src="https://www.youtube.com/embed/${key}"
-frameborder="0" allowfullscreen></iframe>`;
+frameborder="0"
+allowfullscreen></iframe>`;
 
 document.getElementById("modal").style.display = "flex";
 }
