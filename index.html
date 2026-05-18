@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flixora</title>
 
-<!-- 🔥 POPUNDER + SOCIAL BAR (SAFE - NO LAYOUT IMPACT) -->
-<script src="https://pl29472266.effectivecpmnetwork.com/c9/1c/46/c91c464dee4b553b50a9a1b15c04505e.js"></script>
-<script src="https://pl29477853.effectivecpmnetwork.com/9c/23/97/9c2397ced12f84d80e922389edf9b936.js"></script>
-
 <style>
 body{margin:0;background:#000;color:#fff;font-family:Arial}
 
@@ -64,9 +60,6 @@ margin-top:10px;
 <input id="search" placeholder="Search...">
 </header>
 
-<!-- 🔥 (OPTIONAL SAFE BANNER AREA - NOT REQUIRED) -->
-<!-- ads here won't break layout if you add later -->
-
 <div class="tabs">
 <button onclick="loadMovies()">Movies</button>
 <button onclick="loadTV()">TV Shows</button>
@@ -87,99 +80,108 @@ let page = 1;
 let loading = false;
 let allData = [];
 
-/* LOAD MOVIES */
+/* =========================
+   🟢 LOAD MOVIES
+========================= */
 async function loadMovies(){
 
-if(loading) return;
-loading = true;
+  if(loading) return;
+  loading = true;
 
-const res = await fetch(`${BASE}/api/movies?page=${page}`);
-const data = await res.json();
+  const res = await fetch(`${BASE}/api/movies?page=${page}`);
+  const data = await res.json();
 
-allData = [...allData, ...data.results];
+  allData = [...allData, ...data.results];
 
-render(allData);
+  render(allData);
 
-page++;
-loading = false;
+  page++;
+  loading = false;
 }
 
-/* LOAD TV */
+/* =========================
+   🟢 LOAD TV
+========================= */
 async function loadTV(){
 
-const res = await fetch(`${BASE}/api/tv?page=1`);
-const data = await res.json();
+  const res = await fetch(`${BASE}/api/tv?page=1`);
+  const data = await res.json();
 
-allData = data.results || [];
+  allData = data.results || [];
 
-render(allData);
+  render(allData);
 }
 
-/* WATCH */
+/* =========================
+   🟢 WATCH NOW (NEW FEATURE)
+========================= */
 function openWatch(title){
-const url = `https://www.youtube.com/results?search_query=${title}+full+movie`;
-window.open(url, "_blank");
+  const url = `https://www.youtube.com/results?search_query=${title}+full+movie`;
+  window.open(url, "_blank");
 }
 
-/* TRAILER */
+/* =========================
+   🟢 RENDER UI (UPDATED)
+========================= */
+function render(list){
+
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  list.forEach(item=>{
+    grid.innerHTML += `
+      <div class="card">
+        <img src="https://image.tmdb.org/t/p/w500${item.poster_path}">
+        <p>${item.title || item.name}</p>
+
+        <button onclick="openWatch('${item.title || item.name}')">
+          ▶ Watch Now
+        </button>
+      </div>
+    `;
+  });
+}
+
+/* =========================
+   🟢 TRAILER (OPTIONAL KEEP)
+========================= */
 async function openTrailer(id){
 
-const res = await fetch(`${BASE}/api/trailer?id=${id}`);
-const data = await res.json();
+  const res = await fetch(`${BASE}/api/trailer?id=${id}`);
+  const data = await res.json();
 
-const key = data.results?.[0]?.key;
+  const key = data.results?.[0]?.key;
 
-if(!key){
-alert("Trailer not found");
-return;
-}
+  if(!key){
+    alert("Trailer not found");
+    return;
+  }
 
-document.getElementById("video").innerHTML =
-`<iframe width="90%" height="400"
-src="https://www.youtube.com/embed/${key}"
-frameborder="0" allowfullscreen></iframe>`;
+  document.getElementById("video").innerHTML =
+  `<iframe width="90%" height="400"
+  src="https://www.youtube.com/embed/${key}"
+  frameborder="0" allowfullscreen></iframe>`;
 
-document.getElementById("modal").style.display = "flex";
+  document.getElementById("modal").style.display = "flex";
 }
 
 /* CLOSE */
 function closeModal(){
-document.getElementById("modal").style.display = "none";
-document.getElementById("video").innerHTML = "";
-}
-
-/* RENDER */
-function render(list){
-
-const grid = document.getElementById("grid");
-grid.innerHTML = "";
-
-list.forEach(item=>{
-grid.innerHTML += `
-<div class="card">
-<img src="https://image.tmdb.org/t/p/w500${item.poster_path}">
-<p>${item.title || item.name}</p>
-
-<button onclick="openWatch('${item.title || item.name}')">
-▶ Watch Now
-</button>
-
-</div>
-`;
-});
+  document.getElementById("modal").style.display = "none";
+  document.getElementById("video").innerHTML = "";
 }
 
 /* SEARCH */
 document.getElementById("search").addEventListener("input",(e)=>{
-const v = e.target.value.toLowerCase();
-render(allData.filter(i=>(i.title||i.name).toLowerCase().includes(v)));
+  const v = e.target.value.toLowerCase();
+  render(allData.filter(i=>(i.title||i.name).toLowerCase().includes(v)));
 });
 
-/* SCROLL */
+/* INFINITE SCROLL */
 window.addEventListener("scroll", ()=>{
-if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 500){
-loadMovies();
-}
+  if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 500){
+    loadMovies();
+  }
 });
 
 /* START */
