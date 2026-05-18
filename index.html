@@ -1,22 +1,23 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flixora</title>
 
-<!-- ================= POPUNDER + SOCIAL BAR (HEAD) ================= -->
-  <script src="https://pl29472266.effectivecpmnetwork.com/c9/1c/46/c91c464dee4b553b50a9a1b15c04505e.js"></script>
-  <script src="https://pl29481773.effectivecpmnetwork.com/9a/f8/12/9af8120fe740a6c7f0db0f85e7a0ec86.js"></script>
-
-
-
-
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-body{background:#000;color:#fff;font-family:Arial}
+body{
+background:#000;
+color:#fff;
+font-family:Arial;
+}
 
 header{
 display:flex;
@@ -29,7 +30,11 @@ top:0;
 z-index:999;
 }
 
-.logo{color:red;font-size:28px;font-weight:bold}
+.logo{
+color:red;
+font-size:28px;
+font-weight:bold;
+}
 
 input{
 padding:10px;
@@ -55,6 +60,45 @@ color:#fff;
 border:none;
 border-radius:6px;
 cursor:pointer;
+transition:0.3s;
+font-size:14px;
+}
+
+.tabs button:hover{
+background:red;
+transform:scale(1.05);
+}
+
+.hero{
+height:60vh;
+background:url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba') center/cover;
+display:flex;
+align-items:center;
+padding:40px;
+}
+
+.hero-content{
+max-width:500px;
+}
+
+.hero h1{
+font-size:48px;
+margin-bottom:15px;
+}
+
+.hero p{
+line-height:1.6;
+margin-bottom:20px;
+}
+
+.hero button{
+padding:12px 22px;
+background:red;
+color:#fff;
+border:none;
+font-size:16px;
+cursor:pointer;
+border-radius:5px;
 }
 
 .grid{
@@ -64,17 +108,15 @@ gap:20px;
 padding:20px;
 }
 
-/* ================= BANNER AD SPACE ================= */
-.ad-320{
-display:flex;
-justify-content:center;
-margin:10px 0;
-}
-
 .card{
 background:#111;
 border-radius:10px;
 overflow:hidden;
+transition:0.3s;
+}
+
+.card:hover{
+transform:scale(1.05);
 }
 
 .card img{
@@ -85,6 +127,7 @@ object-fit:cover;
 
 .card p{
 padding:10px;
+font-size:15px;
 font-weight:bold;
 }
 
@@ -107,46 +150,64 @@ border-radius:5px;
 .modal{
 display:none;
 position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,0.9);
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.95);
 justify-content:center;
 align-items:center;
 flex-direction:column;
+z-index:9999;
 }
 
-button{
+#video{
+width:90%;
+max-width:900px;
+}
+
+.close-btn{
+margin-top:20px;
+padding:10px 20px;
 background:red;
 color:#fff;
 border:none;
-padding:8px;
 cursor:pointer;
-margin-top:10px;
+}
+
+footer{
+background:#111;
+padding:30px;
+text-align:center;
+margin-top:40px;
+}
+
+@media(max-width:768px){
+
+header{
+flex-direction:column;
+gap:10px;
+}
+
+.hero h1{
+font-size:32px;
+}
+
+input{
+width:100%;
+}
+
 }
 </style>
+
 </head>
 
 <body>
 
 <header>
 <div class="logo">Flixora</div>
-<input id="search" placeholder="Search...">
+<input id="search" placeholder="Search movies...">
 </header>
-
-<!-- ================= 728x90 AD (HEADER BELOW) ================= -->
-<div style="text-align:center;margin:10px 0;">
-<script>
-  atOptions = {
-    'key' : '81b05da731e8cd931ace0c7d5d77fcf4',
-    'format' : 'iframe',
-    'height' : 90,
-    'width' : 728,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/81b05da731e8cd931ace0c7d5d77fcf4/invoke.js"></script>
-
-</div>
 
 <div class="tabs">
 <button onclick="loadMovies()">Trending</button>
@@ -159,131 +220,242 @@ margin-top:10px;
 <button onclick="loadLanguage('bn')">Bangla</button>
 </div>
 
-<!-- ================= 320x50 AD (BEFORE GRID) ================= -->
-<div class="ad-320">
-<script>
-  atOptions = {
-    'key' : '629ac74a8365d095d3b2e711824a684c',
-    'format' : 'iframe',
-    'height' : 50,
-    'width' : 320,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/629ac74a8365d095d3b2e711824a684c/invoke.js"></script>
-
+<section class="hero">
+<div class="hero-content">
+<h1>Unlimited Movies & TV Shows</h1>
+<p>
+Watch trending movies, TV shows and anime from around the world.
+</p>
+<button onclick="window.scrollTo(0,700)">
+Explore Now
+</button>
 </div>
+</section>
 
 <div class="grid" id="grid"></div>
 
 <div class="modal" id="modal">
 <div id="video"></div>
-<button onclick="closeModal()">Close</button>
+<button class="close-btn" onclick="closeModal()">
+Close
+</button>
 </div>
 
-<footer style="text-align:center;padding:20px;">
-© 2026 Flixora
+<footer>
+© 2026 Flixora — All Rights Reserved
 </footer>
 
 <script>
+
 const BASE = "https://movieflix-v2-xi.vercel.app";
 
 let page = 1;
 let loading = false;
 let allData = [];
 
-/* MOVIES */
+/* =========================
+   🟢 LOAD MOVIES
+========================= */
+
 async function loadMovies(){
-if(loading) return;
-loading = true;
 
-const res = await fetch(`${BASE}/api/movies?page=${page}`);
-const data = await res.json();
+  if(loading) return;
 
-allData = [...allData, ...data.results];
-render(allData);
+  loading = true;
 
-page++;
-loading = false;
+  const res = await fetch(`${BASE}/api/movies?page=${page}`);
+
+  const data = await res.json();
+
+  allData = [...allData, ...data.results];
+
+  render(allData);
+
+  page++;
+
+  loading = false;
 }
 
-/* TV */
+/* =========================
+   🟢 LOAD TV SHOWS
+========================= */
+
 async function loadTV(){
-const res = await fetch(`${BASE}/api/tv?page=1`);
-const data = await res.json();
-allData = data.results || [];
-render(allData);
+
+  const res = await fetch(`${BASE}/api/tv?page=1`);
+
+  const data = await res.json();
+
+  allData = data.results || [];
+
+  render(allData);
 }
 
-/* ANIME */
+/* =========================
+   🟢 ANIME
+========================= */
+
 async function loadAnime(){
-const url = `https://api.themoviedb.org/3/discover/tv?api_key=9c8083df192467a734789e2838ce7bf1&with_genres=16`;
-const res = await fetch(url);
-const data = await res.json();
-allData = data.results || [];
-render(allData);
+
+  const url =
+  `https://api.themoviedb.org/3/discover/tv?api_key=9c8083df192467a734789e2838ce7bf1&with_genres=16`;
+
+  const res = await fetch(url);
+
+  const data = await res.json();
+
+  allData = data.results || [];
+
+  render(allData);
 }
 
-/* LANGUAGE */
+/* =========================
+   🟢 LANGUAGE FILTER
+========================= */
+
 async function loadLanguage(lang){
-const url = `https://api.themoviedb.org/3/discover/movie?api_key=9c8083df192467a734789e2838ce7bf1&with_original_language=${lang}`;
-const res = await fetch(url);
-const data = await res.json();
-allData = data.results || [];
-render(allData);
+
+  const url =
+  `https://api.themoviedb.org/3/discover/movie?api_key=9c8083df192467a734789e2838ce7bf1&with_original_language=${lang}`;
+
+  const res = await fetch(url);
+
+  const data = await res.json();
+
+  allData = data.results || [];
+
+  render(allData);
 }
 
-/* WATCH */
+/* =========================
+   🟢 WATCH NOW
+========================= */
+
 function openWatch(title){
-window.open(`https://www.youtube.com/results?search_query=${title}+full+movie`,"_blank");
+
+  const url =
+  `https://www.youtube.com/results?search_query=${title}+full+movie`;
+
+  window.open(url, "_blank");
 }
 
-/* TRAILER */
+/* =========================
+   🟢 TRAILER
+========================= */
+
 async function openTrailer(id){
-const res = await fetch(`${BASE}/api/trailer?id=${id}`);
-const data = await res.json();
 
-const key = data.results?.[0]?.key;
-if(!key){alert("Trailer not found");return;}
+  const res = await fetch(`${BASE}/api/trailer?id=${id}`);
 
-document.getElementById("video").innerHTML =
-`<iframe width="100%" height="500"
-src="https://www.youtube.com/embed/${key}"
-frameborder="0" allowfullscreen></iframe>`;
+  const data = await res.json();
 
-document.getElementById("modal").style.display = "flex";
+  const key = data.results?.[0]?.key;
+
+  if(!key){
+    alert("Trailer not found");
+    return;
+  }
+
+  document.getElementById("video").innerHTML =
+  `<iframe width="100%" height="500"
+  src="https://www.youtube.com/embed/${key}"
+  frameborder="0"
+  allowfullscreen></iframe>`;
+
+  document.getElementById("modal").style.display = "flex";
 }
+
+/* =========================
+   🟢 CLOSE MODAL
+========================= */
 
 function closeModal(){
-document.getElementById("modal").style.display = "none";
-document.getElementById("video").innerHTML = "";
+
+  document.getElementById("modal").style.display = "none";
+
+  document.getElementById("video").innerHTML = "";
 }
 
-/* RENDER */
+/* =========================
+   🟢 RENDER UI
+========================= */
+
 function render(list){
-const grid = document.getElementById("grid");
-grid.innerHTML = "";
 
-list.forEach(item=>{
-grid.innerHTML += `
-<div class="card">
-<img src="https://image.tmdb.org/t/p/w500${item.poster_path}">
-<p>${item.title || item.name}</p>
-<button onclick="openWatch('${item.title || item.name}')">Watch</button>
-<button onclick="openTrailer(${item.id})">Trailer</button>
-</div>`;
-});
+  const grid = document.getElementById("grid");
+
+  grid.innerHTML = "";
+
+  list.forEach(item=>{
+
+    grid.innerHTML += `
+
+    <div class="card">
+
+      <img src="https://image.tmdb.org/t/p/w500${item.poster_path}">
+
+      <p>${item.title || item.name}</p>
+
+      <div class="card-buttons">
+
+      <button onclick="openWatch('${item.title || item.name}')">
+      ▶ Watch Now
+      </button>
+
+      <button onclick="openTrailer(${item.id})">
+      🎬 Trailer
+      </button>
+
+      </div>
+
+    </div>
+
+    `;
+
+  });
 }
 
-/* SEARCH */
-document.getElementById("search").addEventListener("input",(e)=>{
-const v = e.target.value.toLowerCase();
-render(allData.filter(i=>(i.title||i.name).toLowerCase().includes(v)));
+/* =========================
+   🟢 LIVE SEARCH
+========================= */
+
+document.getElementById("search")
+.addEventListener("input",(e)=>{
+
+  const value = e.target.value.toLowerCase();
+
+  render(
+    allData.filter(i=>
+      (i.title || i.name)
+      .toLowerCase()
+      .includes(value)
+    )
+  );
+
 });
 
-/* START */
+/* =========================
+   🟢 INFINITE SCROLL
+========================= */
+
+window.addEventListener("scroll", ()=>{
+
+  if(
+    window.innerHeight + window.scrollY >=
+    document.body.offsetHeight - 500
+  ){
+    loadMovies();
+  }
+
+});
+
+/* =========================
+   🟢 START WEBSITE
+========================= */
+
 loadMovies();
+
 </script>
 
 </body>
-</html>  
+</html>
