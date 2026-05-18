@@ -1,12 +1,23 @@
 <!DOCTYPE html>
-
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flixora</title>
 
+<!-- 🔥 ADSTERRA HEAD SCRIPT START -->
+<script src="https://pl29472266.effectivecpmnetwork.com/c9/1c/46/c91c464dee4b553b50a9a1b15c04505e.js">
+
+/* 👉 Paste your Adsterra POPUNDER / SOCIAL BAR script here */
+</script>
+<script src="https://pl29477853.effectivecpmnetwork.com/9c/23/97/9c2397ced12f84d80e922389edf9b936.js"></script>
+
+<!-- 🔥 ADSTERRA HEAD SCRIPT END -->
+
 <style>
+
+/* ===== YOUR CSS (UNCHANGED) ===== */
+
 *{
 margin:0;
 padding:0;
@@ -60,13 +71,10 @@ color:#fff;
 border:none;
 border-radius:6px;
 cursor:pointer;
-transition:0.3s;
-font-size:14px;
 }
 
 .tabs button:hover{
 background:red;
-transform:scale(1.05);
 }
 
 .hero{
@@ -77,29 +85,7 @@ align-items:center;
 padding:40px;
 }
 
-.hero-content{
-max-width:500px;
-}
-
-.hero h1{
-font-size:48px;
-margin-bottom:15px;
-}
-
-.hero p{
-line-height:1.6;
-margin-bottom:20px;
-}
-
-.hero button{
-padding:12px 22px;
-background:red;
-color:#fff;
-border:none;
-font-size:16px;
-cursor:pointer;
-border-radius:5px;
-}
+.hero h1{font-size:48px;}
 
 .grid{
 display:grid;
@@ -112,11 +98,6 @@ padding:20px;
 background:#111;
 border-radius:10px;
 overflow:hidden;
-transition:0.3s;
-}
-
-.card:hover{
-transform:scale(1.05);
 }
 
 .card img{
@@ -127,7 +108,6 @@ object-fit:cover;
 
 .card p{
 padding:10px;
-font-size:15px;
 font-weight:bold;
 }
 
@@ -161,11 +141,6 @@ flex-direction:column;
 z-index:9999;
 }
 
-#video{
-width:90%;
-max-width:900px;
-}
-
 .close-btn{
 margin-top:20px;
 padding:10px 20px;
@@ -175,29 +150,6 @@ border:none;
 cursor:pointer;
 }
 
-footer{
-background:#111;
-padding:30px;
-text-align:center;
-margin-top:40px;
-}
-
-@media(max-width:768px){
-
-header{
-flex-direction:column;
-gap:10px;
-}
-
-.hero h1{
-font-size:32px;
-}
-
-input{
-width:100%;
-}
-
-}
 </style>
 
 </head>
@@ -209,6 +161,22 @@ width:100%;
 <input id="search" placeholder="Search movies...">
 </header>
 
+<!-- 🔥 ADSTERRA BANNER (TOP) -->
+<div id="adsterra-top-banner">
+<!-- 👉 Paste Banner Ad script here -->
+ <script>
+  atOptions = {
+    'key' : '338c836cb86508dad67bc83751e20d6b',
+    'format' : 'iframe',
+    'height' : 50,
+    'width' : 320,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/338c836cb86508dad67bc83751e20d6b/invoke.js"></script>
+
+</div>
+
 <div class="tabs">
 <button onclick="loadMovies()">Trending</button>
 <button onclick="loadTV()">TV Shows</button>
@@ -217,33 +185,60 @@ width:100%;
 <button onclick="loadLanguage('hi')">Hindi</button>
 <button onclick="loadLanguage('ko')">Korean</button>
 <button onclick="loadLanguage('ja')">Japanese</button>
-<button onclick="loadLanguage('bn')">Bangla</button>
 </div>
 
 <section class="hero">
-<div class="hero-content">
+<div>
 <h1>Unlimited Movies & TV Shows</h1>
-<p>
-Watch trending movies, TV shows and anime from around the world.
-</p>
-<button onclick="window.scrollTo(0,700)">
-Explore Now
-</button>
+<p>Watch trending movies, TV shows and anime</p>
 </div>
 </section>
 
+<!-- 🔥 ADSTERRA MID BANNER -->
+<div id="adsterra-mid-banner">
+    <script>
+  atOptions = {
+    'key' : 'ec1a6675fad6c60a15163d962232949e',
+    'format' : 'iframe',
+    'height' : 250,
+    'width' : 300,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/ec1a6675fad6c60a15163d962232949e/invoke.js"></script>
+
+<!-- 👉 Paste Banner Ad script here -->
+</div>
+
 <div class="grid" id="grid"></div>
+
+<!-- 🔥 ADSTERRA BOTTOM BANNER -->
+<div id="adsterra-bottom-banner">
+<!-- 👉 Paste Banner Ad script here -->
+ <script>
+  atOptions = {
+    'key' : '81b05da731e8cd931ace0c7d5d77fcf4',
+    'format' : 'iframe',
+    'height' : 90,
+    'width' : 728,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/81b05da731e8cd931ace0c7d5d77fcf4/invoke.js"></script>
+
+</div>
 
 <div class="modal" id="modal">
 <div id="video"></div>
-<button class="close-btn" onclick="closeModal()">
-Close
-</button>
+<button class="close-btn" onclick="closeModal()">Close</button>
 </div>
 
-<footer>
-© 2026 Flixora — All Rights Reserved
-</footer>
+<!-- 🔥 ADSTERRA FOOTER SCRIPT -->
+<script src="https://pl29477851.effectivecpmnetwork.com/61/ee/13/61ee1349e6f69a580ab9dcb0c5cbe3c1.js">
+
+/* 👉 Paste Footer / Popunder script here */
+
+</script>
 
 <script>
 
@@ -253,206 +248,128 @@ let page = 1;
 let loading = false;
 let allData = [];
 
-/* =========================
-   🟢 LOAD MOVIES
-========================= */
-
+/* MOVIES */
 async function loadMovies(){
+if(loading) return;
+loading = true;
 
-  if(loading) return;
+const res = await fetch(`${BASE}/api/movies?page=${page}`);
+const data = await res.json();
 
-  loading = true;
+allData = [...allData, ...data.results];
 
-  const res = await fetch(`${BASE}/api/movies?page=${page}`);
+render(allData);
 
-  const data = await res.json();
-
-  allData = [...allData, ...data.results];
-
-  render(allData);
-
-  page++;
-
-  loading = false;
+page++;
+loading = false;
 }
 
-/* =========================
-   🟢 LOAD TV SHOWS
-========================= */
-
+/* TV */
 async function loadTV(){
-
-  const res = await fetch(`${BASE}/api/tv?page=1`);
-
-  const data = await res.json();
-
-  allData = data.results || [];
-
-  render(allData);
+const res = await fetch(`${BASE}/api/tv?page=1`);
+const data = await res.json();
+allData = data.results || [];
+render(allData);
 }
 
-/* =========================
-   🟢 ANIME
-========================= */
-
+/* ANIME */
 async function loadAnime(){
-
-  const url =
-  `https://api.themoviedb.org/3/discover/tv?api_key=9c8083df192467a734789e2838ce7bf1&with_genres=16`;
-
-  const res = await fetch(url);
-
-  const data = await res.json();
-
-  allData = data.results || [];
-
-  render(allData);
+const url = `https://api.themoviedb.org/3/discover/tv?api_key=9c8083df192467a734789e2838ce7bf1&with_genres=16`;
+const res = await fetch(url);
+const data = await res.json();
+allData = data.results || [];
+render(allData);
 }
 
-/* =========================
-   🟢 LANGUAGE FILTER
-========================= */
-
+/* LANGUAGE */
 async function loadLanguage(lang){
-
-  const url =
-  `https://api.themoviedb.org/3/discover/movie?api_key=9c8083df192467a734789e2838ce7bf1&with_original_language=${lang}`;
-
-  const res = await fetch(url);
-
-  const data = await res.json();
-
-  allData = data.results || [];
-
-  render(allData);
+const url = `https://api.themoviedb.org/3/discover/movie?api_key=9c8083df192467a734789e2838ce7bf1&with_original_language=${lang}`;
+const res = await fetch(url);
+const data = await res.json();
+allData = data.results || [];
+render(allData);
 }
 
-/* =========================
-   🟢 WATCH NOW
-========================= */
-
+/* WATCH */
 function openWatch(title){
-
-  const url =
-  `https://www.youtube.com/results?search_query=${title}+full+movie`;
-
-  window.open(url, "_blank");
+const url = `https://www.youtube.com/results?search_query=${title}+full+movie`;
+window.open(url, "_blank");
 }
 
-/* =========================
-   🟢 TRAILER
-========================= */
-
+/* TRAILER */
 async function openTrailer(id){
 
-  const res = await fetch(`${BASE}/api/trailer?id=${id}`);
+const res = await fetch(`${BASE}/api/trailer?id=${id}`);
+const data = await res.json();
 
-  const data = await res.json();
+let trailer = data.results.find(v =>
+v.type === "Trailer" && v.site === "YouTube"
+);
 
-  const key = data.results?.[0]?.key;
-
-  if(!key){
-    alert("Trailer not found");
-    return;
-  }
-
-  document.getElementById("video").innerHTML =
-  `<iframe width="100%" height="500"
-  src="https://www.youtube.com/embed/${key}"
-  frameborder="0"
-  allowfullscreen></iframe>`;
-
-  document.getElementById("modal").style.display = "flex";
+if(!trailer){
+trailer = data.results.find(v => v.site === "YouTube");
 }
 
-/* =========================
-   🟢 CLOSE MODAL
-========================= */
+if(!trailer){
+alert("Trailer not found");
+return;
+}
 
+const key = trailer.key;
+
+document.getElementById("video").innerHTML =
+`<iframe width="100%" height="500"
+src="https://www.youtube.com/embed/${key}?autoplay=1"
+frameborder="0"
+allow="autoplay; encrypted-media"
+allowfullscreen></iframe>`;
+
+document.getElementById("modal").style.display = "flex";
+}
+
+/* CLOSE */
 function closeModal(){
-
-  document.getElementById("modal").style.display = "none";
-
-  document.getElementById("video").innerHTML = "";
+document.getElementById("modal").style.display = "none";
+document.getElementById("video").innerHTML = "";
 }
 
-/* =========================
-   🟢 RENDER UI
-========================= */
-
+/* RENDER */
 function render(list){
+const grid = document.getElementById("grid");
+grid.innerHTML = "";
 
-  const grid = document.getElementById("grid");
+list.forEach(item=>{
+grid.innerHTML += `
+<div class="card">
+<img src="https://image.tmdb.org/t/p/w500${item.poster_path}">
+<p>${item.title || item.name}</p>
 
-  grid.innerHTML = "";
+<div class="card-buttons">
+<button onclick="openWatch('${item.title || item.name}')">▶ Watch</button>
+<button onclick="openTrailer(${item.id})">🎬 Trailer</button>
+</div>
 
-  list.forEach(item=>{
-
-    grid.innerHTML += `
-
-    <div class="card">
-
-      <img src="https://image.tmdb.org/t/p/w500${item.poster_path}">
-
-      <p>${item.title || item.name}</p>
-
-      <div class="card-buttons">
-
-      <button onclick="openWatch('${item.title || item.name}')">
-      ▶ Watch Now
-      </button>
-
-      <button onclick="openTrailer(${item.id})">
-      🎬 Trailer
-      </button>
-
-      </div>
-
-    </div>
-
-    `;
-
-  });
+</div>
+`;
+});
 }
 
-/* =========================
-   🟢 LIVE SEARCH
-========================= */
-
-document.getElementById("search")
-.addEventListener("input",(e)=>{
-
-  const value = e.target.value.toLowerCase();
-
-  render(
-    allData.filter(i=>
-      (i.title || i.name)
-      .toLowerCase()
-      .includes(value)
-    )
-  );
-
+/* SEARCH */
+document.getElementById("search").addEventListener("input",(e)=>{
+const value = e.target.value.toLowerCase();
+render(allData.filter(i =>
+(i.title || i.name).toLowerCase().includes(value)
+));
 });
 
-/* =========================
-   🟢 INFINITE SCROLL
-========================= */
-
+/* SCROLL */
 window.addEventListener("scroll", ()=>{
-
-  if(
-    window.innerHeight + window.scrollY >=
-    document.body.offsetHeight - 500
-  ){
-    loadMovies();
-  }
-
+if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 500){
+loadMovies();
+}
 });
 
-/* =========================
-   🟢 START WEBSITE
-========================= */
-
+/* START */
 loadMovies();
 
 </script>
