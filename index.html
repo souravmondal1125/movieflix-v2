@@ -6,7 +6,7 @@
 <title>Flixora</title>
 
 <style>
-/* (তোমার আগের CSS 그대로 রাখা হয়েছে) */
+/* ORIGINAL CSS (UNCHANGED) */
 
 *{
 margin:0;
@@ -139,6 +139,14 @@ color:#fff;
 border:none;
 cursor:pointer;
 }
+
+/* 🆕 Continue Watching UI */
+.continue-box{
+background:#111;
+margin:10px 20px;
+padding:15px;
+border-radius:10px;
+}
 </style>
 
 </head>
@@ -150,14 +158,24 @@ cursor:pointer;
 <input id="search" placeholder="Search movies...">
 </header>
 
+<!-- =========================
+     🟢 MENU + GENRE ADDED
+========================= -->
 <div class="tabs">
 <button onclick="loadMovies()">Trending</button>
 <button onclick="loadTV()">TV Shows</button>
 <button onclick="loadAnime()">Anime</button>
+
 <button onclick="loadLanguage('en')">English</button>
 <button onclick="loadLanguage('hi')">Hindi</button>
 <button onclick="loadLanguage('ko')">Korean</button>
 <button onclick="loadLanguage('ja')">Japanese</button>
+
+<!-- GENRE FILTER -->
+<button onclick="loadGenre(28)">Action</button>
+<button onclick="loadGenre(35)">Comedy</button>
+<button onclick="loadGenre(27)">Horror</button>
+<button onclick="loadGenre(18)">Drama</button>
 </div>
 
 <section class="hero">
@@ -166,6 +184,9 @@ cursor:pointer;
 <p>Watch trending movies, TV shows and anime</p>
 </div>
 </section>
+
+<!-- CONTINUE WATCHING -->
+<div id="continueBox"></div>
 
 <div class="grid" id="grid"></div>
 
@@ -224,26 +245,31 @@ allData = data.results || [];
 render(allData);
 }
 
+/* 🟢 GENRE FILTER */
+async function loadGenre(id){
+const url = `https://api.themoviedb.org/3/discover/movie?api_key=9c8083df192467a734789e2838ce7bf1&with_genres=${id}`;
+const res = await fetch(url);
+const data = await res.json();
+allData = data.results || [];
+render(allData);
+}
+
 /* WATCH */
 function openWatch(title){
 const url = `https://www.youtube.com/results?search_query=${title}+full+movie`;
 window.open(url, "_blank");
 }
 
-/* =========================
-   🎬 FIXED TRAILER SYSTEM
-========================= */
+/* TRAILER */
 async function openTrailer(id){
 
 const res = await fetch(`${BASE}/api/trailer?id=${id}`);
 const data = await res.json();
 
-// 🎯 official trailer first
 let trailer = data.results.find(v =>
 v.type === "Trailer" && v.site === "YouTube"
 );
 
-// fallback
 if(!trailer){
 trailer = data.results.find(v => v.site === "YouTube");
 }
@@ -271,6 +297,27 @@ document.getElementById("modal").style.display = "none";
 document.getElementById("video").innerHTML = "";
 }
 
+/* 🟢 CONTINUE WATCHING */
+function saveWatch(id,title){
+localStorage.setItem("lastMovie", JSON.stringify({id,title}));
+openWatch(title);
+}
+
+function loadContinue(){
+const last = localStorage.getItem("lastMovie");
+if(!last) return;
+
+const movie = JSON.parse(last);
+
+document.getElementById("continueBox").innerHTML = `
+<div class="continue-box">
+<h3>▶ Continue Watching</h3>
+<p>${movie.title}</p>
+<button onclick="openWatch('${movie.title}')">Resume</button>
+</div>
+`;
+}
+
 /* RENDER */
 function render(list){
 const grid = document.getElementById("grid");
@@ -283,10 +330,16 @@ grid.innerHTML += `
 <p>${item.title || item.name}</p>
 
 <div class="card-buttons">
-<button onclick="openWatch('${item.title || item.name}')">▶ Watch</button>
-<button onclick="openTrailer(${item.id})">🎬 Trailer</button>
-</div>
 
+<button onclick="saveWatch('${item.id}','${item.title || item.name}')">
+▶ Watch
+</button>
+
+<button onclick="openTrailer(${item.id})">
+🎬 Trailer
+</button>
+
+</div>
 </div>
 `;
 });
@@ -309,8 +362,9 @@ loadMovies();
 
 /* START */
 loadMovies();
+loadContinue();
 
 </script>
 
 </body>
-</html>   .. ai je amar code akhne tumi puro add kore ready kore dao ai code gulo
+</html>
