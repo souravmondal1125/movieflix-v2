@@ -149,6 +149,18 @@
             border:none;
         }
 
+        /* 🟢 Adsterra 320x50 Banner Container Styling */
+        .ad-banner-watch {
+            text-align: center;
+            margin: 25px auto 15px auto;
+            width: 100%;
+            max-width: 320px;
+            min-height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .movie-details{
             max-width:1000px;
             margin:25px auto;
@@ -249,6 +261,7 @@
         .movie-card:hover .watch-btn{
             background:#00b4d8;
             color:#fff;
+            border-color:#00b4d8;
         }
     </style>
 </head>
@@ -303,6 +316,19 @@
             referrerpolicy="no-referrer-when-downgrade"
             allow="autoplay; fullscreen; encrypted-media; picture-in-picture">
         </iframe>
+    </div>
+
+    <div class="ad-banner-watch">
+        <script>
+            atOptions = {
+                'key' : '629ac74a8365d095d3b2e711824a684c',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script src="https://www.highperformanceformat.com/629ac74a8365d095d3b2e711824a684c/invoke.js"></script>
     </div>
 
 </div>
@@ -362,7 +388,7 @@ if(contentType === 'tv' || contentType === 'show' || contentType === 'series') {
     document.getElementById('radioMovie').checked = true;
 }
 
-// 🚀 সার্ভার লিঙ্কগুলো একদম লেটেস্ট ও ১০০% একটিভ ডোমেন দিয়ে সেট করা হলো
+// সার্ভার লিঙ্কগুলো
 function updateServers() {
     if (contentType === 'tv') {
         servers[1] = `https://vidsrc.to/embed/tv/${movieId}/1/1`;
@@ -401,7 +427,7 @@ function changeServer(serverNum, buttonBtn){
 
 updateServers();
 
-// 🚀 'You May Also Like' সেকশন এখন সরাসরি TMDB API থেকে রিয়েল-টাইম ডাটা নিয়ে আসবে
+// 'You May Also Like' সেকশন ডাটা লোড লজিক
 async function loadRelated(){
     try{
         const response = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&query=${encodeURIComponent(movieTitle)}`);
@@ -413,7 +439,7 @@ async function loadRelated(){
             let count = 0;
             data.results.forEach(movie=>{
                 if(!movie.poster_path || count >= 6) return;
-                if(movie.id === movieId) return; // বর্তমান মুভিটি স্কিপ করবে
+                if(movie.id === movieId) return; 
 
                 const title = movie.title || movie.name || 'Unknown';
                 let itemMode = contentType;
@@ -421,7 +447,6 @@ async function loadRelated(){
 
                 const card = document.createElement('a');
                 card.className='movie-card';
-                // Vercel-এর জন্য watch.html লিঙ্ক রুট ব্যবহার করা হয়েছে
                 card.href = `watch.html?id=${movie.id}&title=${encodeURIComponent(title)}&mode=${itemMode}`;
 
                 card.innerHTML = `
@@ -444,6 +469,10 @@ async function loadRelated(){
 
 loadRelated();
 </script>
+
+<script src="https://pl29472266.effectivecpmnetwork.com/c9/1c/46/c91c464dee4b553b50a9a1b15c04505e.js"></script>
+
+<script src="https://pl29481773.effectivecpmnetwork.com/9a/f8/12/9af8120fe740a6c7f0db0f85e7a0ec86.js"></script>
 
 </body>
 </html>
