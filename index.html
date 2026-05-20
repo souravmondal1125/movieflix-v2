@@ -57,7 +57,6 @@
         .action-btn { background: #161c28; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 50%; cursor: pointer; transition: 0.3s; font-size: 16px; }
         .action-btn:hover { border-color: var(--primary); color: var(--primary); }
 
-        /* Adsterra 320x50 Banner Container Styling */
         .ad-banner-320 { text-align: center; margin: 0 auto 25px auto; width: 100%; max-width: 320px; min-height: 50px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
 
         .filter-container { display: flex; gap: 12px; flex-wrap: wrap; background: #131722; padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 35px; align-items: center; }
@@ -166,18 +165,7 @@
             </div>
         </header>
 
-        <div class="ad-banner-320">
-            <script>
-                atOptions = {
-                    'key' : '629ac74a8365d095d3b2e711824a684c',
-                    'format' : 'iframe',
-                    'height' : 50,
-                    'width' : 320,
-                    'params' : {}
-                };
-            </script>
-            <script src="https://www.highperformanceformat.com/629ac74a8365d095d3b2e711824a684c/invoke.js"></script>
-        </div>
+        <div class="ad-banner-320" id="adBannerBox"></div>
 
         <section class="filter-container">
             <span class="filter-label"><i class="fas fa-filter"></i> Filter:</span>
@@ -404,12 +392,44 @@
             document.getElementById('share-tg').href = `https://telegram.me/share/url?url=${url}&text=${txt}`;
         }
 
-        window.addEventListener('DOMContentLoaded', () => { loadTrending(); });
+        // 🟢 মেইন সল্যুশন: আগে মুভি লোড হবে, তারপর একদম সেফলি ব্যাকগ্রাউন্ডে বিজ্ঞাপন রান করবে
+        window.addEventListener('DOMContentLoaded', () => { 
+            // ১. আগে মুভি সার্ভার থেকে ডেটা নিয়ে আসবে (ইউজার যেন ফাঁকা না দেখে)
+            loadTrending(); 
+
+            // ২. মুভি লোড হওয়ার ১ সেকেন্ড পর বিজ্ঞাপনগুলো লোড করার চেষ্টা করবে
+            setTimeout(() => {
+                try {
+                    // ৩২০x৫০ ব্যানার ইনজেক্ট করা
+                    const adContainer = document.getElementById('adBannerBox');
+                    if(adContainer) {
+                        window.atOptions = {
+                            'key' : '629ac74a8365d095d3b2e711824a684c',
+                            'format' : 'iframe',
+                            'height' : 50,
+                            'width' : 320,
+                            'params' : {}
+                        };
+                        const adScript = document.createElement('script');
+                        adScript.src = "https://www.highperformanceformat.com/629ac74a8365d095d3b2e711824a684c/invoke.js";
+                        adContainer.appendChild(adScript);
+                    }
+
+                    // পপআন্ডার ও সোশ্যাল বার অ্যাড স্ক্রিপ্ট ব্যাকগ্রাউন্ডে রান করানো
+                    const popunderScript = document.createElement('script');
+                    popunderScript.src = "https://pl29472266.effectivecpmnetwork.com/c9/1c/46/c91c464dee4b553b50a9a1b15c04505e.js";
+                    popunderScript.async = true;
+                    document.body.appendChild(popunderScript);
+
+                    const socialBarScript = document.createElement('script');
+                    socialBarScript.src = "https://pl29481773.effectivecpmnetwork.com/9a/f8/12/9af8120fe740a6c7f0db0f85e7a0ec86.js";
+                    socialBarScript.async = true;
+                    document.body.appendChild(socialBarScript);
+                } catch(e) {
+                    console.log("Adblocker active, keeping site clean for user.");
+                }
+            }, 1000); // ১ সেকেন্ড ডিলে দেওয়া হয়েছে
+        });
     </script>
-
-    <script src="https://pl29472266.effectivecpmnetwork.com/c9/1c/46/c91c464dee4b553b50a9a1b15c04505e.js"></script>
-
-    <script src="https://pl29481773.effectivecpmnetwork.com/9a/f8/12/9af8120fe740a6c7f0db0f85e7a0ec86.js"></script>
-
 </body>
 </html>
