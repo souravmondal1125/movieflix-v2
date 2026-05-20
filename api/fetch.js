@@ -4,10 +4,9 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'application/json');
 
-    // এটি Vercel ড্যাশবোর্ড থেকে এপিআই কি রিড করবে, কোডে ওপেন থাকবে না
+    // এটি Vercel ড্যাশবোর্ড থেকে এপিআই কি রিড করবে, কোডে ওপেনথাকবে না
     const API_KEY =$api_key = '5a38b7d65eda265648420724d027d59d'; 
     const BASE_URL = 'https://api.themoviedb.org/3';
-
     const { action, type, mode, page = 1, query, with_genres, primary_release_year, with_original_language, exclude_anime } = req.query;
 
     let target_url = '';
