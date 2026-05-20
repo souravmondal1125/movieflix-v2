@@ -1,3 +1,9 @@
+<?php
+// InfinityFree-এর সিকিউরিটি ইস্যু এড়াতে পিএইচপি হেডারগুলো ফ্রন্টএন্ডে রাখা হলো
+header("X-Frame-Options: SAMEORIGIN");
+header("X-Content-Type-Options: nosniff");
+header("Referrer-Policy: no-referrer-when-downgrade");
+?>
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -94,7 +100,7 @@
             .sidebar { transform: translateX(-100%); }
             .sidebar.active { transform: translateX(0); }
             .main-content { margin-left: 0; padding: 20px; }
-            .menu-trigger { display: block; }
+            .menu-trigger { block; }
             .search-wrapper { width: 100%; }
         }
         @media (max-width: 580px) {
@@ -118,27 +124,27 @@
 
             <div class="menu-heading">🎬 Movies By Lang</div>
             <ul class="menu-list">
-                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'Bengali Movies', '', 'bn')"><i class="fas fa-film"></i> Bengali</a></li>
-                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'Hindi Movies', '', 'hi')"><i class="fas fa-film"></i> Hindi</a></li>
+                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'Bengali Movies', 'bn')"><i class="fas fa-film"></i> Bengali</a></li>
+                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'Hindi Movies', 'hi')"><i class="fas fa-film"></i> Hindi</a></li>
                 <li class="menu-item"><a href="#" onclick="filterContent('movie', 'south', 'South Indian Movies')"><i class="fas fa-bolt"></i> South Indian</a></li>
                 
                 <li class="menu-item">
                     <a href="#" onclick="toggleSubMenu(event)"><i class="fas fa-microphone"></i> Hindi Dubbed <i class="fas fa-chevron-down" style="margin-left:auto; font-size:11px;"></i></a>
                     <ul class="sub-menu">
-                        <li><a href="#" onclick="filterContent('movie', 'discover', 'Hindi Dubbed Movies', '', '', 'true')"><i class="fas fa-clapperboard"></i> Only Movies</a></li>
-                        <li><a href="#" onclick="filterContent('movie', 'discover', 'Anime Dubbed', '', 'ja')"><i class="fas fa-cat"></i> Anime Combo</a></li>
+                        <li><a href="#" onclick="filterContent('movie', 'discover', 'Hindi Dubbed Movies', '', 'true')"><i class="fas fa-clapperboard"></i> Only Movies</a></li>
+                        <li><a href="#" onclick="filterContent('movie', 'discover', 'Anime Dubbed', 'ja')"><i class="fas fa-cat"></i> Anime Combo</a></li>
                     </ul>
                 </li>
                 
-                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'Telugu Movies', '', 'te')"><i class="fas fa-film"></i> Telugu</a></li>
-                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'Tamil Movies', '', 'ta')"><i class="fas fa-film"></i> Tamil</a></li>
-                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'English Movies', '', 'en')"><i class="fas fa-film"></i> English</a></li>
+                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'Telugu Movies', 'te')"><i class="fas fa-film"></i> Telugu</a></li>
+                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'Tamil Movies', 'ta')"><i class="fas fa-film"></i> Tamil</a></li>
+                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'English Movies', 'en')"><i class="fas fa-film"></i> English</a></li>
             </ul>
 
             <div class="menu-heading">📺 Web Series</div>
             <ul class="menu-list">
                 <li class="menu-item"><a href="#" onclick="filterContent('tv', 'trending', 'Trending Web Series')"><i class="fas fa-tv"></i> Trending Series</a></li>
-                <li class="menu-item"><a href="#" onclick="filterContent('tv', 'discover', 'Korean Series', '', 'ko')"><i class="fas fa-heart"></i> K-Dramas</a></li>
+                <li class="menu-item"><a href="#" onclick="filterContent('tv', 'discover', 'Korean Series', 'ko')"><i class="fas fa-heart"></i> K-Dramas</a></li>
             </ul>
         </div>
     </aside>
@@ -207,14 +213,20 @@
     </main>
 
     <script>
-        // 🚀 এখানে আমাদের নতুন Vercel এপিআই পাথ সেট করা হয়েছে
-        const API_URL = '/api/fetch'; 
+        // 🚀 আপনার এপিআই কি সরাসরি এখানে সংযুক্ত করে প্রক্সি বাইপাস করা হলো
+        const TMDB_KEY = "5a38b7d65eda265648420724d027d59d"; 
+        const BASE_URL = "https://api.themoviedb.org/3";
+        
         let currentPage = 1;
         let currentMode = 'movie'; 
-        let baseEndpoint = 'action=fetch&type=trending&mode=movie';
+        let currentType = 'trending';
+        let currentLang = '';
+        let isSouth = false;
+        let excludeAnime = '';
+        let searchQuery = '';
         const siteUrl = window.location.href;
 
-        function goToHome() { window.location.href = '/'; }
+        function goToHome() { window.location.href = 'index.php'; }
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('active'); }
         function toggleSubMenu(e) { e.preventDefault(); const sm = e.currentTarget.nextElementSibling; sm.style.display = sm.style.display === 'block' ? 'none' : 'block'; }
 
@@ -230,15 +242,31 @@
                 currentPage = 1;
             }
             
-            let finalEndpoint = baseEndpoint;
+            let target_url = '';
             const genre = document.getElementById('filterGenre').value;
             const year = document.getElementById('filterYear').value;
 
-            if (genre) finalEndpoint += `&with_genres=${genre}`;
-            if (year) finalEndpoint += `&primary_release_year=${year}`;
+            // এপিআই ইউআরএল তৈরি করার ডাইনামিক লজিক
+            if (searchQuery) {
+                target_url = `${BASE_URL}/search/multi?api_key=${TMDB_KEY}&query=${encodeURIComponent(searchQuery)}&page=${currentPage}`;
+            } else if (isSouth) {
+                target_url = `${BASE_URL}/discover/movie?api_key=${TMDB_KEY}&with_original_language=te|ta|ml|kn&sort_by=popularity.desc&page=${currentPage}`;
+            } else if (currentType === 'trending') {
+                target_url = `${BASE_URL}/trending/${currentMode}/week?api_key=${TMDB_KEY}&page=${currentPage}`;
+            } else {
+                target_url = `${BASE_URL}/discover/${currentMode}?api_key=${TMDB_KEY}&sort_by=popularity.desc&page=${currentPage}`;
+            }
+
+            // ফিল্টার প্যারামিটার পুশ করা
+            if (currentLang && !searchQuery && !isSouth) target_url += `&with_original_language=${currentLang}`;
+            if (excludeAnime === 'true') target_url += `&without_genres=16`;
+            if (genre) target_url += `&with_genres=${genre}`;
+            if (year) {
+                target_url += currentMode === 'movie' ? `&primary_release_year=${year}` : `&first_air_date_year=${year}`;
+            }
 
             try {
-                const response = await fetch(`${API_URL}?${finalEndpoint}&page=${currentPage}`);
+                const response = await fetch(target_url);
                 const data = await response.json();
                 
                 if (!isLoadMore) grid.innerHTML = '';
@@ -254,7 +282,8 @@
                         let itemMode = currentMode;
                         if(item.media_type) itemMode = item.media_type;
 
-                        const watchLink = `watch.html?id=${item.id}&mode=${itemMode}&title=${encodeURIComponent(title)}`;
+                        // আপনার প্লেয়ার পেজের নাম watch.php থাকলে এখানে watch.php দিন
+                        const watchLink = `watch.php?id=${item.id}&type=${itemMode}&title=${encodeURIComponent(title)}`;
 
                         const card = document.createElement('div');
                         card.className = 'movie-card';
@@ -290,24 +319,27 @@
             document.getElementById('filterGenre').value = '';
             document.getElementById('filterYear').value = '';
             currentMode = 'movie';
-            baseEndpoint = 'action=fetch&type=trending&mode=movie';
+            currentType = 'trending';
+            currentLang = '';
+            isSouth = false;
+            excludeAnime = '';
+            searchQuery = '';
             fetchMovies(false);
             updateShareLinks('Trending');
         }
 
-        function filterContent(mode, type, sectionName, keywords = '', lang = '', excludeAnime = '') {
+        function filterContent(mode, type, sectionName, lang = '', exAnime = '') {
             document.getElementById('pageTitle').innerText = sectionName;
             currentMode = mode;
+            currentType = type;
+            currentLang = lang;
+            excludeAnime = exAnime;
+            searchQuery = '';
+            isSouth = (type === 'south');
+            
             document.getElementById('filterGenre').value = '';
             document.getElementById('filterYear').value = '';
 
-            if (type === 'south') {
-                baseEndpoint = `action=south&mode=${mode}`;
-            } else {
-                baseEndpoint = `action=fetch&type=${type}&mode=${mode}`;
-                if(lang) baseEndpoint += `&with_original_language=${lang}`;
-                if(excludeAnime) baseEndpoint += `&exclude_anime=true`;
-            }
             fetchMovies(false);
             updateShareLinks(sectionName);
         }
@@ -340,7 +372,7 @@
             const q = e.target.value.trim();
             if (q.length > 2) {
                 document.getElementById('pageTitle').innerText = `Search: "${q}"`;
-                baseEndpoint = `action=search&query=${encodeURIComponent(q)}`;
+                searchQuery = q;
                 resetPageAndFetch();
             } else if (q.length === 0) {
                 loadTrending();
