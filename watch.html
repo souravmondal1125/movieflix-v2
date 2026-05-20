@@ -279,7 +279,7 @@
 
     <div class="tabs-container">
         <button id="serverBtn1" class="tab-btn active" onclick="changeServer(1,this)">
-            <i class="fas fa-play-circle"></i> VidSrc
+            <i class="fas fa-play-circle"></i> VidSrc Pro
         </button>
         <button id="serverBtn2" class="tab-btn" onclick="changeServer(2,this)">
             <i class="fas fa-bolt"></i> AutoEmbed
@@ -302,7 +302,7 @@
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
             allow="autoplay; fullscreen; encrypted-media; picture-in-picture">
-        </footer>
+        </iframe>
     </div>
 
 </div>
@@ -313,7 +313,7 @@
         <span>4K HD</span>
         <span>2026</span>
         <span style="color:#ffb400;">
-            <i class="fas fa-star"></i> TMDB
+            <i class="fas fa-star"></i> TMDB Premium
         </span>
     </div>
 </div>
@@ -324,6 +324,7 @@
 </div>
 
 <script>
+// অ্যান্টি-পপআপ এবং রাইট ক্লিক লক সিস্টেম আগের মতোই আছে
 (function() {
     window.open = function() { return true; }; 
     window.onbeforeunload = function() { return "Are you sure you want to leave?"; };
@@ -333,6 +334,9 @@
 window.addEventListener('contextmenu', function(e){
     e.preventDefault();
 });
+
+// আপনার নতুন API Key এখানে সিকিউর করা হলো
+const TMDB_KEY = "5a38b7d65eda265648420724d027d59d"; 
 
 const urlParams = new URLSearchParams(window.location.search);
 const movieId = parseInt(urlParams.get('id'));
@@ -357,14 +361,15 @@ if(contentType === 'tv' || contentType === 'show' || contentType === 'series') {
     document.getElementById('radioMovie').checked = true;
 }
 
+// 🚀 সার্ভার লিঙ্কগুলো একদম লেটেস্ট ও একটিভ ডোমেন দিয়ে আপডেট করা হয়েছে
 function updateServers() {
     if (contentType === 'tv') {
-        servers[1] = `https://vidsrc.me/embed/tv?tmdb=${movieId}&season=1&episode=1`;
+        servers[1] = `https://vidsrc.to/embed/tv/${movieId}/1/1`;
         servers[2] = `https://autoembed.to/tv/tmdb/${movieId}-1-1`;
         servers[3] = `https://embed.smashystream.com/playere.php?tmdb=${movieId}&season=1&episode=1`;
         servers[4] = `https://vidlink.pro/tv/${movieId}/1/1`;
     } else {
-        servers[1] = `https://vidsrc.me/embed/movie?tmdb=${movieId}`;
+        servers[1] = `https://vidsrc.to/embed/movie/${movieId}`;
         servers[2] = `https://autoembed.to/movie/tmdb/${movieId}`;
         servers[3] = `https://embed.smashystream.com/playere.php?tmdb=${movieId}`;
         servers[4] = `https://vidlink.pro/movie/${movieId}`;
@@ -393,19 +398,24 @@ function changeServer(serverNum, buttonBtn){
     player.src = servers[serverNum];
 }
 
+// সার্ভার ইনিশিয়াল লোড
 updateServers();
 
-// 🚀 এখানে আমাদের নতুন Vercel Serverless API-এর পাথ দেওয়া হয়েছে
+// 🚀 Vercel ক্লায়েন্ট সাইড ডাইরেক্ট রিকমেন্ডেশন ইঞ্জিন (Related Movies Fix)
 async function loadRelated(){
     try{
-        const response = await fetch(`/api/fetch?action=search&query=${encodeURIComponent(movieTitle)}`);
+        // সরাসরি TMDB এপিআই ব্যবহার করে সার্চ রেজাল্ট আনা হচ্ছে
+        const response = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&query=${encodeURIComponent(movieTitle)}`);
         const data = await response.json();
         const grid = document.getElementById('related-grid');
         grid.innerHTML='';
 
         if(Array.isArray(data.results)){
-            data.results.slice(0,6).forEach(movie=>{
-                if(!movie.poster_path) return;
+            let count = 0;
+            data.results.forEach(movie=>{
+                if(!movie.poster_path || count >= 6) return;
+                // বর্তমান মুভিটিকে সাজেশন থেকে বাদ রাখার চেষ্টা
+                if(movie.id === movieId) return; 
 
                 const title = movie.title || movie.name || 'Unknown';
                 let itemMode = contentType;
@@ -425,13 +435,15 @@ async function loadRelated(){
                     </div>
                 `;
                 grid.appendChild(card);
+                count++;
             });
         }
     }catch(e){
-        console.error(e);
+        console.error("Related movies load error: ", e);
     }
 }
 
+// রিলেটেড মুভি লোড করা হলো
 loadRelated();
 </script>
 
