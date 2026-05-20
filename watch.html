@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Movie & Shows - MovZone</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+            background:#0b0e14;
+            color:#fff;
+            padding-bottom:50px;
+        }
+
+        header{
+            background:#111622;
+            padding:15px 5%;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            box-shadow:0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .back-btn{
+            color:#fff;
+            text-decoration:none;
+            font-size:15px;
+            font-weight:600;
+            display:flex;
+            align-items:center;
+            gap:8px;
+            padding:8px 16px;
+            background:#1b2232;
+            border:1px solid #2d3748;
+            border-radius:30px;
+            transition:.3s;
+        }
+
+        .back-btn:hover{
+            background:#00b4d8;
+            border-color:#00b4d8;
+        }
+
+        .logo{
+            font-size:22px;
+            font-weight:bold;
+            color:#00b4d8;
+            cursor:pointer;
+            letter-spacing:1px;
+        }
+
+        .logo span{
+            color:#fff;
+        }
+
+        .player-container{
+            max-width:1060px;
+            margin:30px auto;
+            padding:0 15px;
+        }
+
+        .type-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            background: #111622;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid #1e2638;
+        }
+        .type-label {
+            color: #a0aec0;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+        }
+        .type-label input {
+            accent-color: #00b4d8;
+            width: 16px;
+            height: 16px;
+        }
+
+        .tabs-container{
+            display:flex;
+            gap:10px;
+            margin-bottom:15px;
+            background:#111622;
+            padding:8px;
+            border-radius:8px;
+            border:1px solid #1e2638;
+            flex-wrap:wrap;
+        }
+
+        .tab-btn{
+            background:#1b2232;
+            border:1px solid #2d3748;
+            color:#a0aec0;
+            padding:8px 20px;
+            border-radius:6px;
+            cursor:pointer;
+            font-weight:600;
+            font-size:14px;
+            transition:.3s;
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+
+        .tab-btn:hover{
+            color:#fff;
+            background:#232d42;
+        }
+
+        .tab-btn.active{
+            background:#00b4d8;
+            color:#fff;
+            border-color:#00b4d8;
+        }
+
+        .video-box{
+            position:relative;
+            padding-bottom:56.25%;
+            height:0;
+            background:#000;
+            border-radius:12px;
+            overflow:hidden;
+            border:1px solid #1e2638;
+        }
+
+        .video-box iframe{
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            border:none;
+        }
+
+        .movie-details{
+            max-width:1000px;
+            margin:25px auto;
+            padding:0 15px;
+        }
+
+        .movie-title{
+            font-size:28px;
+            font-weight:bold;
+            margin-bottom:5px;
+        }
+
+        .movie-meta{
+            font-size:14px;
+            color:#718096;
+            display:flex;
+            gap:15px;
+            margin-bottom:15px;
+            flex-wrap:wrap;
+        }
+
+        .movie-meta span{
+            background:#1b2232;
+            padding:4px 10px;
+            border-radius:4px;
+            color:#00b4d8;
+        }
+
+        .related-section{
+            max-width:1060px;
+            margin:40px auto 0;
+            padding:0 15px;
+        }
+
+        .related-title{
+            font-size:20px;
+            font-weight:bold;
+            margin-bottom:20px;
+            border-left:4px solid #00b4d8;
+            padding-left:12px;
+        }
+
+        .movie-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+            gap:20px;
+        }
+
+        .movie-card{
+            background:#111622;
+            border-radius:8px;
+            overflow:hidden;
+            transition:.3s;
+            display:flex;
+            flex-direction:column;
+            text-decoration:none;
+            border:1px solid #1e2638;
+        }
+
+        .movie-card:hover{
+            transform:translateY(-5px);
+            border-color:#00b4d8;
+        }
+
+        .movie-card img{
+            width:100%;
+            height:230px;
+            object-fit:cover;
+        }
+
+        .movie-info{
+            padding:12px;
+        }
+
+        .m-title{
+            font-size:14px;
+            font-weight:600;
+            color:#fff;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+
+        .watch-btn{
+            display:block;
+            text-align:center;
+            background:#1b2232;
+            color:#00b4d8;
+            text-decoration:none;
+            padding:8px 0;
+            border-radius:6px;
+            font-size:13px;
+            font-weight:bold;
+            margin-top:10px;
+            border:1px solid #2d3748;
+        }
+
+        .movie-card:hover .watch-btn{
+            background:#00b4d8;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back to Home
+    </a>
+    <div class="logo" onclick="window.location.href='index.html'">
+        MOV<span>ZONE</span>
+    </div>
+</header>
+
+<div class="player-container">
+
+    <div class="type-container">
+        <label class="type-label">
+            <input type="radio" name="contentType" id="radioMovie" value="movie" checked onclick="switchType('movie')"> 
+            <i class="fas fa-film" style="color: #00b4d8;"></i> Movie Mode
+        </label>
+        <label class="type-label">
+            <input type="radio" name="contentType" id="radioTV" value="tv" onclick="switchType('tv')"> 
+            <i class="fas fa-tv" style="color: #ffb400;"></i> TV Show / Web Series
+        </label>
+    </div>
+
+    <div class="tabs-container">
+        <button id="serverBtn1" class="tab-btn active" onclick="changeServer(1,this)">
+            <i class="fas fa-play-circle"></i> VidSrc
+        </button>
+        <button id="serverBtn2" class="tab-btn" onclick="changeServer(2,this)">
+            <i class="fas fa-bolt"></i> AutoEmbed
+        </button>
+        <button id="serverBtn3" class="tab-btn" onclick="changeServer(3,this)">
+            <i class="fas fa-film"></i> Smashy
+        </button>
+        <button id="serverBtn4" class="tab-btn" onclick="changeServer(4,this)">
+            <i class="fas fa-server"></i> VidLink
+        </button>
+    </div>
+
+    <div class="video-box">
+        <iframe
+            id="videoPlayer"
+            src=""
+            allowfullscreen="true"
+            webkitallowfullscreen="true"
+            mozallowfullscreen="true"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture">
+        </footer>
+    </div>
+
+</div>
+
+<div class="movie-details">
+    <h1 class="movie-title" id="mName">Loading Title...</h1>
+    <div class="movie-meta">
+        <span>4K HD</span>
+        <span>2026</span>
+        <span style="color:#ffb400;">
+            <i class="fas fa-star"></i> TMDB
+        </span>
+    </div>
+</div>
+
+<div class="related-section">
+    <div class="related-title">You May Also Like</div>
+    <div class="movie-grid" id="related-grid"></div>
+</div>
+
+<script>
+(function() {
+    window.open = function() { return true; }; 
+    window.onbeforeunload = function() { return "Are you sure you want to leave?"; };
+    setInterval(function() { window.onbeforeunload = null; }, 500);
+})();
+
+window.addEventListener('contextmenu', function(e){
+    e.preventDefault();
+});
+
+const urlParams = new URLSearchParams(window.location.search);
+const movieId = parseInt(urlParams.get('id'));
+
+if(!movieId || isNaN(movieId)){
+    alert('Invalid Movie ID');
+    window.location.href='index.html';
+}
+
+const movieTitle = urlParams.get('title') || 'Streaming Now';
+document.getElementById('mName').textContent = decodeURIComponent(movieTitle);
+
+let contentType = urlParams.get('mode') || urlParams.get('type') || 'movie';
+let activeServerNum = 1;
+let servers = {};
+
+if(contentType === 'tv' || contentType === 'show' || contentType === 'series') {
+    contentType = 'tv';
+    document.getElementById('radioTV').checked = true;
+} else {
+    contentType = 'movie';
+    document.getElementById('radioMovie').checked = true;
+}
+
+function updateServers() {
+    if (contentType === 'tv') {
+        servers[1] = `https://vidsrc.me/embed/tv?tmdb=${movieId}&season=1&episode=1`;
+        servers[2] = `https://autoembed.to/tv/tmdb/${movieId}-1-1`;
+        servers[3] = `https://embed.smashystream.com/playere.php?tmdb=${movieId}&season=1&episode=1`;
+        servers[4] = `https://vidlink.pro/tv/${movieId}/1/1`;
+    } else {
+        servers[1] = `https://vidsrc.me/embed/movie?tmdb=${movieId}`;
+        servers[2] = `https://autoembed.to/movie/tmdb/${movieId}`;
+        servers[3] = `https://embed.smashystream.com/playere.php?tmdb=${movieId}`;
+        servers[4] = `https://vidlink.pro/movie/${movieId}`;
+    }
+    
+    const player = document.getElementById('videoPlayer');
+    player.src = servers[activeServerNum];
+}
+
+function switchType(type) {
+    contentType = type;
+    updateServers();
+}
+
+function changeServer(serverNum, buttonBtn){
+    if(!servers[serverNum]) return;
+    
+    document.querySelectorAll('.tab-btn').forEach(btn=>{
+        btn.classList.remove('active');
+    });
+
+    buttonBtn.classList.add('active');
+    activeServerNum = serverNum;
+    
+    const player = document.getElementById('videoPlayer');
+    player.src = servers[serverNum];
+}
+
+updateServers();
+
+// 🚀 এখানে আমাদের নতুন Vercel Serverless API-এর পাথ দেওয়া হয়েছে
+async function loadRelated(){
+    try{
+        const response = await fetch(`/api/fetch?action=search&query=${encodeURIComponent(movieTitle)}`);
+        const data = await response.json();
+        const grid = document.getElementById('related-grid');
+        grid.innerHTML='';
+
+        if(Array.isArray(data.results)){
+            data.results.slice(0,6).forEach(movie=>{
+                if(!movie.poster_path) return;
+
+                const title = movie.title || movie.name || 'Unknown';
+                let itemMode = contentType;
+                if(movie.media_type) itemMode = movie.media_type;
+
+                const card = document.createElement('a');
+                card.className='movie-card';
+                card.href = `watch.html?id=${movie.id}&title=${encodeURIComponent(title)}&mode=${itemMode}`;
+
+                card.innerHTML = `
+                    <img loading="lazy" src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${title}">
+                    <div class="movie-info">
+                        <div class="m-title">${title}</div>
+                        <div class="watch-btn">
+                            <i class="fas fa-play"></i> Watch Now
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+    }catch(e){
+        console.error(e);
+    }
+}
+
+loadRelated();
+</script>
+
+</body>
+</html>
