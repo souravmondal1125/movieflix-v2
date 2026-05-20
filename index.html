@@ -1,488 +1,366 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flixora</title>
-   <meta name="description" content="Watch trending movies and trailers online">
-<meta name="keywords" content="movies, tv shows, anime, trailers">  
-<meta name="description" content="Watch trending movies, TV shows and anime trailers online for free.">
-<meta name="keywords" content="movies, tv shows, anime, trailers, watch online">
-<meta name="author" content="Flixora">
-   <!-- !-- ================= POPUNDER + SOCIAL BAR (HEAD) =================  -->
-   <script src="https://pl29472266.effectivecpmnetwork.com/c9/1c/46/c91c464dee4b553b50a9a1b15c04505e.js"></script>
-   <script src="https://pl29481773.effectivecpmnetwork.com/9a/f8/12/9af8120fe740a6c7f0db0f85e7a0ec86.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovZone - Premium Global Streaming</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #0e1118;
+            --bg-sidebar: #131722;
+            --bg-card: #181f2a;
+            --primary: #e50914;
+            --primary-glow: rgba(229, 9, 20, 0.4);
+            --text-main: #fff;
+            --text-muted: #798296;
+            --border: #222b3c;
+        }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); display: flex; min-height: 100vh; overflow-x: hidden; }
 
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar-thumb { background: #2a354a; border-radius: 10px; }
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+        .sidebar { width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; transition: transform 0.3s ease; }
+        .sidebar-brand { padding: 25px; font-size: 24px; font-weight: 800; color: var(--primary); letter-spacing: 1.5px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .sidebar-brand span { color: #fff; }
+        
+        .sidebar-scroller { flex: 1; overflow-y: auto; padding: 20px 15px; }
+        .menu-heading { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.5px; margin: 20px 0 10px 10px; }
+        
+        .menu-list { list-style: none; }
+        .menu-item a { display: flex; align-items: center; gap: 12px; color: #b1b9ca; text-decoration: none; padding: 12px 15px; font-size: 14px; font-weight: 600; border-radius: 8px; margin-bottom: 4px; transition: all 0.2s ease; }
+        .menu-item a:hover, .menu-item a.active { background: #1c2434; color: #fff; }
+        .menu-item a.active { border-left: 3px solid var(--primary); border-radius: 0 8px 8px 0; color: var(--primary); }
+        
+        .sub-menu { list-style: none; padding-left: 25px; margin: 5px 0; display: none; }
+        .sub-menu a { padding: 8px 12px; font-size: 13px; color: #8e99ae; }
 
-body{
-background:#000;
-color:#fff;
-font-family:Arial;
-}
+        .main-content { flex: 1; margin-left: 260px; padding: 25px 40px; min-width: 0; }
 
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px;
-background:#111;
-position:sticky;
-top:0;
-z-index:999;
-}
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; gap: 20px; }
+        .search-wrapper { position: relative; width: 350px; }
+        .search-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .search-wrapper input { width: 100%; background: #161c28; border: 1px solid var(--border); padding: 12px 12px 12px 45px; border-radius: 30px; color: #fff; outline: none; font-size: 14px; transition: 0.3s; }
+        .search-wrapper input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+        
+        .topbar-actions { display: flex; gap: 15px; align-items: center; }
+        .action-btn { background: #161c28; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 50%; cursor: pointer; transition: 0.3s; font-size: 16px; }
+        .action-btn:hover { border-color: var(--primary); color: var(--primary); }
 
-.logo{
-color:red;
-font-size:28px;
-font-weight:bold;
-}
+        .filter-container { display: flex; gap: 12px; flex-wrap: wrap; background: #131722; padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 35px; align-items: center; }
+        .filter-label { font-size: 12px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .filter-dropdown { background: #181f2a; border: 1px solid var(--border); color: #fff; padding: 10px 15px; border-radius: 8px; font-size: 13px; font-weight: 600; outline: none; cursor: pointer; min-width: 130px; transition: 0.2s; }
+        .filter-dropdown:focus { border-color: var(--primary); }
 
-input{
-padding:10px;
-width:220px;
-border:none;
-border-radius:5px;
-outline:none;
-}
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .category-title { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; position: relative; }
+        .category-title::after { content: ''; display: block; width: 40px; height: 4px; background: var(--primary); border-radius: 2px; margin-top: 5px; }
 
-.tabs{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:10px;
-padding:15px;
-background:#111;
-}
+        .share-box { display: flex; align-items: center; gap: 10px; background: #131722; padding: 8px 15px; border-radius: 30px; border: 1px solid var(--border); font-size: 13px; }
+        .share-box a { color: #8e99ae; transition: 0.2s; font-size: 15px; }
+        .share-box a:hover { transform: scale(1.15); }
+        .share-box a.wa:hover { color: #25D366; }
+        .share-box a.fb:hover { color: #1877F2; }
+        .share-box a.tg:hover { color: #0088cc; }
 
-.tabs button{
-padding:10px 18px;
-background:#222;
-color:#fff;
-border:none;
-border-radius:6px;
-cursor:pointer;
-transition:0.3s;
-font-size:14px;
-}
+        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; }
+        .movie-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; display: flex; flex-direction: column; text-decoration: none; cursor: pointer; }
+        .movie-card:hover { transform: translateY(-8px); border-color: #313d54; box-shadow: 0 12px 24px rgba(0,0,0,0.5); }
+        
+        .img-container { position: relative; width: 100%; height: 250px; overflow: hidden; background: #07090e; }
+        .movie-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .movie-card:hover img { transform: scale(1.06); }
+        
+        .card-badge { position: absolute; top: 12px; left: 12px; background: var(--primary); color: #fff; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; z-index: 2; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+        .card-badge.quality { left: auto; right: 12px; background: #3b82f6; }
 
-.tabs button:hover{
-background:red;
-transform:scale(1.05);
-}
+        .movie-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .movie-title { font-size: 14px; font-weight: 700; color: #fff; line-height: 1.4; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 38px; }
+        
+        .movie-meta { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted); font-weight: 600; }
+        .rating { color: #ffb400; display: flex; align-items: center; gap: 4px; }
 
-.hero{
-height:60vh;
-background:url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba') center/cover;
-display:flex;
-align-items:center;
-padding:40px;
-}
+        .load-more-container { text-align: center; margin: 50px 0 20px 0; }
+        .load-more-btn { background: #131722; border: 1px solid var(--border); color: #fff; padding: 14px 40px; font-size: 14px; font-weight: 700; border-radius: 30px; cursor: pointer; transition: 0.3s; }
+        .load-more-btn:hover { border-color: var(--primary); background: var(--primary); box-shadow: 0 4px 15px var(--primary-glow); }
 
-.hero-content{
-max-width:500px;
-}
+        .menu-trigger { display: none; }
 
-.hero h1{
-font-size:48px;
-margin-bottom:15px;
-}
-
-.hero p{
-line-height:1.6;
-margin-bottom:20px;
-}
-
-.hero button{
-padding:12px 22px;
-background:red;
-color:#fff;
-border:none;
-font-size:16px;
-cursor:pointer;
-border-radius:5px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
-gap:20px;
-padding:20px;
-}
-
-.card{
-background:#111;
-border-radius:10px;
-overflow:hidden;
-transition:0.3s;
-}
-
-.card:hover{
-transform:scale(1.05);
-}
-
-.card img{
-width:100%;
-height:260px;
-object-fit:cover;
-}
-
-.card p{
-padding:10px;
-font-size:15px;
-font-weight:bold;
-}
-
-.card-buttons{
-padding:10px;
-display:flex;
-flex-direction:column;
-gap:8px;
-}
-
-.card button{
-background:red;
-color:#fff;
-border:none;
-padding:8px;
-cursor:pointer;
-border-radius:5px;
-}
-
-.modal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.95);
-justify-content:center;
-align-items:center;
-flex-direction:column;
-z-index:9999;
-}
-
-#video{
-width:90%;
-max-width:900px;
-}
-
-.close-btn{
-margin-top:20px;
-padding:10px 20px;
-background:red;
-color:#fff;
-border:none;
-cursor:pointer;
-}
-
-footer{
-background:#111;
-padding:30px;
-text-align:center;
-margin-top:40px;
-}
-
-@media(max-width:768px){
-
-header{
-flex-direction:column;
-gap:10px;
-}
-
-.hero h1{
-font-size:32px;
-}
-
-input{
-width:100%;
-}
-
-}
-</style>
-
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 20px; }
+            .menu-trigger { display: block; }
+            .search-wrapper { width: 100%; }
+        }
+        @media (max-width: 580px) {
+            .topbar { flex-direction: column; align-items: flex-start; }
+            .filter-container { flex-direction: column; align-items: stretch; }
+            .movie-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
+            .img-container { height: 210px; }
+        }
+    </style>
 </head>
-
 <body>
 
-<header>
-<div class="logo">Flixora</div>
-<input id="search" placeholder="Search movies...">
-</header>
-   <nav style="text-align:center;padding:10px;background:#111">
-  <a href="about.html" style="color:white;margin:10px">About</a>
-  <a href="privacy.html" style="color:white;margin:10px">Privacy</a>
-  <a href="contact.html" style="color:white;margin:10px">Contact</a>
-  <a href="disclaimer.html" style="color:white;margin:10px">Disclaimer</a>
-</nav>
-   <script>
-  atOptions = {
-    'key' : '81b05da731e8cd931ace0c7d5d77fcf4',
-    'format' : 'iframe',
-    'height' : 90,
-    'width' : 728,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/81b05da731e8cd931ace0c7d5d77fcf4/invoke.js"></script>
-
-
-<div class="tabs">
-<button onclick="loadMovies()">Trending</button>
-<button onclick="loadTV()">TV Shows</button>
-<button onclick="loadAnime()">Anime</button>
-<button onclick="loadLanguage('en')">English</button>
-<button onclick="loadLanguage('hi')">Hindi</button>
-<button onclick="loadLanguage('ko')">Korean</button>
-<button onclick="loadLanguage('ja')">Japanese</button>
-<button onclick="loadLanguage('bn')">Bangla</button>
-</div>
-
-<section class="hero">
-<div class="hero-content">
-<h1>Unlimited Movies & TV Shows</h1>
-<p>
-Watch trending movies, TV shows and anime from around the world.
-</p>
-<button onclick="window.scrollTo(0,700)">
-Explore Now
-</button>
-</div>
-</section>
-
-<div class="grid" id="grid"></div>
-
-<div class="modal" id="modal">
-<div id="video"></div>
-<button class="close-btn" onclick="closeModal()">
-Close
-</button>
-</div>
-
-<footer>
-© 2026 Flixora — All Rights Reserved
-</footer>
-
-<script>
-
-const BASE = "https://movieflix-v2-xi.vercel.app";
-
-let page = 1;
-let loading = false;
-let allData = [];
-
-/* =========================
-   🟢 LOAD MOVIES
-========================= */
-
-async function loadMovies(){
-
-  if(loading) return;
-
-  loading = true;
-
-  const res = await fetch(`${BASE}/api/movies?page=${page}`);
-
-  const data = await res.json();
-
-  allData = [...allData, ...data.results];
-
-  render(allData);
-
-  page++;
-
-  loading = false;
-}
-
-/* =========================
-   🟢 LOAD TV SHOWS
-========================= */
-
-async function loadTV(){
-
-  const res = await fetch(`${BASE}/api/tv?page=1`);
-
-  const data = await res.json();
-
-  allData = data.results || [];
-
-  render(allData);
-}
-
-/* =========================
-   🟢 ANIME
-========================= */
-
-async function loadAnime(){
-
-  const url =
-  `https://api.themoviedb.org/3/discover/tv?api_key=9c8083df192467a734789e2838ce7bf1&with_genres=16`;
-
-  const res = await fetch(url);
-
-  const data = await res.json();
-
-  allData = data.results || [];
-
-  render(allData);
-}
-
-/* =========================
-   🟢 LANGUAGE FILTER
-========================= */
-
-async function loadLanguage(lang){
-
-  const url =
-  `https://api.themoviedb.org/3/discover/movie?api_key=9c8083df192467a734789e2838ce7bf1&with_original_language=${lang}`;
-
-  const res = await fetch(url);
-
-  const data = await res.json();
-
-  allData = data.results || [];
-
-  render(allData);
-}
-
-/* =========================
-   🟢 WATCH NOW
-========================= */
-
-function openWatch(title){
-
-  const url =
-  `https://www.youtube.com/results?search_query=${title}+full+movie`;
-
-  window.open(url, "_blank");
-}
-
-/* =========================
-   🟢 TRAILER
-========================= */
-
-async function openTrailer(id){
-
-  const res = await fetch(`${BASE}/api/trailer?id=${id}`);
-
-  const data = await res.json();
-
-  const key = data.results?.[0]?.key;
-
-  if(!key){
-    alert("Trailer not found");
-    return;
-  }
-
-  document.getElementById("video").innerHTML =
-  `<iframe width="100%" height="500"
-  src="https://www.youtube.com/embed/${key}"
-  frameborder="0"
-  allowfullscreen></iframe>`;
-
-  document.getElementById("modal").style.display = "flex";
-}
-
-/* =========================
-   🟢 CLOSE MODAL
-========================= */
-
-function closeModal(){
-
-  document.getElementById("modal").style.display = "none";
-
-  document.getElementById("video").innerHTML = "";
-}
-
-/* =========================
-   🟢 RENDER UI
-========================= */
-
-function render(list){
-
-  const grid = document.getElementById("grid");
-
-  grid.innerHTML = "";
-
-  list.forEach(item=>{
-
-    grid.innerHTML += `
-
-    <div class="card">
-
-      <img src="https://image.tmdb.org/t/p/w500${item.poster_path}">
-
-      <p>${item.title || item.name}</p>
-
-      <div class="card-buttons">
-
-      <button onclick="openWatch('${item.title || item.name}')">
-      ▶ Watch Now
-      </button>
-
-      <button onclick="openTrailer(${item.id})">
-      🎬 Trailer
-      </button>
-
-      </div>
-
-    </div>
-
-    `;
-
-  });
-}
-
-/* =========================
-   🟢 LIVE SEARCH
-========================= */
-
-document.getElementById("search")
-.addEventListener("input",(e)=>{
-
-  const value = e.target.value.toLowerCase();
-
-  render(
-    allData.filter(i=>
-      (i.title || i.name)
-      .toLowerCase()
-      .includes(value)
-    )
-  );
-
-});
-
-/* =========================
-   🟢 INFINITE SCROLL
-========================= */
-
-window.addEventListener("scroll", ()=>{
-
-  if(
-    window.innerHeight + window.scrollY >=
-    document.body.offsetHeight - 500
-  ){
-    loadMovies();
-  }
-
-});
-
-/* =========================
-   🟢 START WEBSITE
-========================= */
-
-loadMovies();
-
-</script>
-
+    <aside class="sidebar" id="sidebarMenu">
+        <div class="sidebar-brand" onclick="goToHome()">MOV<span>ZONE</span></div>
+        
+        <div class="sidebar-scroller">
+            <div class="menu-heading">Discover</div>
+            <ul class="menu-list">
+                <li class="menu-item"><a href="#" id="btn-trending" class="active" onclick="loadTrending()"><i class="fas fa-fire"></i> Trending Now</a></li>
+            </ul>
+
+            <div class="menu-heading">🎬 Movies By Lang</div>
+            <ul class="menu-list">
+                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'Bengali Movies', '', 'bn')"><i class="fas fa-film"></i> Bengali</a></li>
+                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'Hindi Movies', '', 'hi')"><i class="fas fa-film"></i> Hindi</a></li>
+                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'south', 'South Indian Movies')"><i class="fas fa-bolt"></i> South Indian</a></li>
+                
+                <li class="menu-item">
+                    <a href="#" onclick="toggleSubMenu(event)"><i class="fas fa-microphone"></i> Hindi Dubbed <i class="fas fa-chevron-down" style="margin-left:auto; font-size:11px;"></i></a>
+                    <ul class="sub-menu">
+                        <li><a href="#" onclick="filterContent('movie', 'discover', 'Hindi Dubbed Movies', '', '', 'true')"><i class="fas fa-clapperboard"></i> Only Movies</a></li>
+                        <li><a href="#" onclick="filterContent('movie', 'discover', 'Anime Dubbed', '', 'ja')"><i class="fas fa-cat"></i> Anime Combo</a></li>
+                    </ul>
+                </li>
+                
+                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'Telugu Movies', '', 'te')"><i class="fas fa-film"></i> Telugu</a></li>
+                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'Tamil Movies', '', 'ta')"><i class="fas fa-film"></i> Tamil</a></li>
+                <li class="menu-item"><a href="#" onclick="filterContent('movie', 'discover', 'English Movies', '', 'en')"><i class="fas fa-film"></i> English</a></li>
+            </ul>
+
+            <div class="menu-heading">📺 Web Series</div>
+            <ul class="menu-list">
+                <li class="menu-item"><a href="#" onclick="filterContent('tv', 'trending', 'Trending Web Series')"><i class="fas fa-tv"></i> Trending Series</a></li>
+                <li class="menu-item"><a href="#" onclick="filterContent('tv', 'discover', 'Korean Series', '', 'ko')"><i class="fas fa-heart"></i> K-Dramas</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div style="display:flex; align-items:center; gap:15px; width:100%;">
+                <button class="action-btn menu-trigger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <div class="search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search movies, tv shows...">
+                </div>
+            </div>
+            <div class="topbar-actions">
+                <button class="action-btn" onclick="shareWholeSite()"><i class="fas fa-share-nodes"></i></button>
+            </div>
+        </header>
+
+        <section class="filter-container">
+            <span class="filter-label"><i class="fas fa-filter"></i> Filter:</span>
+            <select class="filter-dropdown" id="filterGenre" onchange="resetPageAndFetch()">
+                <option value="">All Genres</option>
+                <option value="28">Action</option>
+                <option value="12">Adventure</option>
+                <option value="16">Animation</option>
+                <option value="35">Comedy</option>
+                <option value="18">Drama</option>
+                <option value="10751">Family</option>
+                <option value="27">Horror</option>
+                <option value="9648">Mystery</option>
+                <option value="10749">Romance</option>
+                <option value="878">Sci-Fi</option>
+                <option value="53">Thriller</option>
+            </select>
+
+            <select class="filter-dropdown" id="filterYear" onchange="resetPageAndFetch()">
+                <option value="">All Years</option>
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2020">2020+</option>
+            </select>
+
+            <select class="filter-dropdown">
+                <option value="4K">All Quality (4K HD)</option>
+            </select>
+        </section>
+
+        <div class="section-header">
+            <h2 class="category-title" id="pageTitle">Trending Now</h2>
+            <div class="share-box">
+                <span>Share:</span>
+                <a class="wa" id="share-wa" href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a class="fb" id="share-fb" href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a class="tg" id="share-tg" href="#" target="_blank"><i class="fab fa-telegram"></i></a>
+            </div>
+        </div>
+
+        <div class="movie-grid" id="main-movie-grid"></div>
+
+        <div class="load-more-container">
+            <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">Load More Content</button>
+        </div>
+    </main>
+
+    <script>
+        // 🚀 এখানে আমাদের নতুন Vercel এপিআই পাথ সেট করা হয়েছে
+        const API_URL = '/api/fetch'; 
+        let currentPage = 1;
+        let currentMode = 'movie'; 
+        let baseEndpoint = 'action=fetch&type=trending&mode=movie';
+        const siteUrl = window.location.href;
+
+        function goToHome() { window.location.href = '/'; }
+        function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('active'); }
+        function toggleSubMenu(e) { e.preventDefault(); const sm = e.currentTarget.nextElementSibling; sm.style.display = sm.style.display === 'block' ? 'none' : 'block'; }
+
+        function escapeHTML(str) {
+            if (!str) return 'Unknown';
+            return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+        }
+
+        async function fetchMovies(isLoadMore = false) {
+            const grid = document.getElementById('main-movie-grid');
+            if (!isLoadMore) {
+                grid.innerHTML = '<p style="padding:20px; color:#aaa;">Loading premium sources...</p>';
+                currentPage = 1;
+            }
+            
+            let finalEndpoint = baseEndpoint;
+            const genre = document.getElementById('filterGenre').value;
+            const year = document.getElementById('filterYear').value;
+
+            if (genre) finalEndpoint += `&with_genres=${genre}`;
+            if (year) finalEndpoint += `&primary_release_year=${year}`;
+
+            try {
+                const response = await fetch(`${API_URL}?${finalEndpoint}&page=${currentPage}`);
+                const data = await response.json();
+                
+                if (!isLoadMore) grid.innerHTML = '';
+                
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(item => {
+                        if (!item.poster_path) return;
+                        const title = item.title || item.name || 'Unknown';
+                        const safeTitle = escapeHTML(title);
+                        const rating = item.vote_average ? item.vote_average.toFixed(1) : '7.5';
+                        const yearData = (item.release_date || item.first_air_date || '2026').split('-')[0];
+                        
+                        let itemMode = currentMode;
+                        if(item.media_type) itemMode = item.media_type;
+
+                        const watchLink = `watch.html?id=${item.id}&mode=${itemMode}&title=${encodeURIComponent(title)}`;
+
+                        const card = document.createElement('div');
+                        card.className = 'movie-card';
+                        card.innerHTML = `
+                            <div class="img-container">
+                                <span class="card-badge">New</span>
+                                <span class="card-badge quality">4K HD</span>
+                                <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${safeTitle}" loading="lazy">
+                            </div>
+                            <div class="movie-info">
+                                <div class="movie-title" title="${safeTitle}">${safeTitle}</div>
+                                <div class="movie-meta">
+                                    <span>${yearData}</span>
+                                    <span class="rating"><i class="fas fa-star"></i> ${rating}</span>
+                                </div>
+                            </div>
+                        `;
+                        card.onclick = () => window.location.href = watchLink;
+                        grid.appendChild(card);
+                    });
+                } else if (!isLoadMore) {
+                    grid.innerHTML = '<p style="padding:20px; color:#666;">No items match the filters.</p>';
+                }
+            } catch (error) {
+                if(!isLoadMore) grid.innerHTML = '<p style="padding:20px; color:var(--primary);">Connection Error!</p>';
+                console.error(error);
+            }
+        }
+
+        function loadTrending() {
+            setActiveLink(document.getElementById('btn-trending'));
+            document.getElementById('pageTitle').innerText = 'Trending Now';
+            document.getElementById('filterGenre').value = '';
+            document.getElementById('filterYear').value = '';
+            currentMode = 'movie';
+            baseEndpoint = 'action=fetch&type=trending&mode=movie';
+            fetchMovies(false);
+            updateShareLinks('Trending');
+        }
+
+        function filterContent(mode, type, sectionName, keywords = '', lang = '', excludeAnime = '') {
+            document.getElementById('pageTitle').innerText = sectionName;
+            currentMode = mode;
+            document.getElementById('filterGenre').value = '';
+            document.getElementById('filterYear').value = '';
+
+            if (type === 'south') {
+                baseEndpoint = `action=south&mode=${mode}`;
+            } else {
+                baseEndpoint = `action=fetch&type=${type}&mode=${mode}`;
+                if(lang) baseEndpoint += `&with_original_language=${lang}`;
+                if(excludeAnime) baseEndpoint += `&exclude_anime=true`;
+            }
+            fetchMovies(false);
+            updateShareLinks(sectionName);
+        }
+
+        function resetPageAndFetch() {
+            currentPage = 1;
+            fetchMovies(false);
+        }
+
+        function loadMore() { 
+            currentPage++; 
+            fetchMovies(true); 
+        }
+
+        function setActiveLink(el) {
+            document.querySelectorAll('.menu-item a').forEach(a => a.classList.remove('active'));
+            if(el) el.classList.add('active');
+        }
+
+        document.querySelectorAll('.menu-item > a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if(!this.innerHTML.includes('fa-chevron-down')) {
+                    setActiveLink(this);
+                    if(window.innerWidth <= 1024) toggleSidebar();
+                }
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const q = e.target.value.trim();
+            if (q.length > 2) {
+                document.getElementById('pageTitle').innerText = `Search: "${q}"`;
+                baseEndpoint = `action=search&query=${encodeURIComponent(q)}`;
+                resetPageAndFetch();
+            } else if (q.length === 0) {
+                loadTrending();
+            }
+        });
+
+        function shareWholeSite() {
+            if (navigator.share) { navigator.share({ title: 'MovZone', url: siteUrl }); }
+            else { window.open(`https://api.whatsapp.com/send?text=MovZone ${encodeURIComponent(siteUrl)}`); }
+        }
+
+        function updateShareLinks(name) {
+            const txt = encodeURIComponent(`Watch ${name} on MovZone!`);
+            const url = encodeURIComponent(siteUrl);
+            document.getElementById('share-wa').href = `https://api.whatsapp.com/send?text=${txt}%20${url}`;
+            document.getElementById('share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+            document.getElementById('share-tg').href = `https://telegram.me/share/url?url=${url}&text=${txt}`;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => { loadTrending(); });
+    </script>
 </body>
 </html>
