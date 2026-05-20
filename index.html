@@ -57,7 +57,7 @@
         .action-btn { background: #161c28; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 50%; cursor: pointer; transition: 0.3s; font-size: 16px; }
         .action-btn:hover { border-color: var(--primary); color: var(--primary); }
 
-        .ad-banner-320 { text-align: center; margin: 0 auto 25px auto; width: 100%; max-width: 320px; min-height: 50px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        .ad-banner-320 { text-align: center; margin: 0 auto 25px auto; width: 100%; max-width: 320px; min-height: 50px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.02); border-radius: 6px; }
 
         .filter-container { display: flex; gap: 12px; flex-wrap: wrap; background: #131722; padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 35px; align-items: center; }
         .filter-label { font-size: 12px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
@@ -97,6 +97,8 @@
         .load-more-btn:hover { border-color: var(--primary); background: var(--primary); box-shadow: 0 4px 15px var(--primary-glow); }
 
         .menu-trigger { display: none; }
+        
+        .retry-btn { background: var(--primary); border: none; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
 
         @media (max-width: 1024px) {
             .sidebar { transform: translateX(-100%); }
@@ -112,6 +114,8 @@
             .img-container { height: 210px; }
         }
     </style>
+    
+    <script type='text/javascript' src='//pl29472266.effectivecpmnetwork.com/c9/1c/46/c91c464dee4b553b50a9a1b15c04505e.js' async></script>
 </head>
 <body>
 
@@ -165,7 +169,18 @@
             </div>
         </header>
 
-        <div class="ad-banner-320" id="adBannerBox"></div>
+        <div class="ad-banner-320">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '629ac74a8365d095d3b2e711824a684c',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/629ac74a8365d095d3b2e711824a684c/invoke.js"></script>
+        </div>
 
         <section class="filter-container">
             <span class="filter-label"><i class="fas fa-filter"></i> Filter:</span>
@@ -238,7 +253,8 @@
             return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
         }
 
-        async function fetchMovies(isLoadMore = false) {
+        // অটোরিট্রাই সহ উন্নত ফেচ মেকানিজম (মুভি ফিক্স করার মূল জায়গা)
+        async function fetchMovies(isLoadMore = false, retries = 2) {
             const grid = document.getElementById('main-movie-grid');
             if (!isLoadMore) {
                 grid.innerHTML = '<p style="padding:20px; color:#aaa;">Loading premium sources...</p>';
@@ -268,6 +284,7 @@
 
             try {
                 const response = await fetch(target_url);
+                if (!response.ok) throw new Error("Server error");
                 const data = await response.json();
                 
                 if (!isLoadMore) grid.innerHTML = '';
@@ -308,8 +325,19 @@
                     grid.innerHTML = '<p style="padding:20px; color:#666;">No items match the filters.</p>';
                 }
             } catch (error) {
-                if(!isLoadMore) grid.innerHTML = '<p style="padding:20px; color:var(--primary);">Connection Error!</p>';
-                console.error(error);
+                if (retries > 0) {
+                    console.log(`Retrying fetch... (${retries} left)`);
+                    setTimeout(() => fetchMovies(isLoadMore, retries - 1), 1000);
+                } else {
+                    if(!isLoadMore) {
+                        grid.innerHTML = `
+                            <div style="padding:20px; color:var(--primary);">
+                                <p>Network connection drops or API temporary limit! Please tap retry.</p>
+                                <button class="retry-btn" onclick="fetchMovies(false)">Retry Loading</button>
+                            </div>`;
+                    }
+                    console.error(error);
+                }
             }
         }
 
@@ -392,45 +420,20 @@
             document.getElementById('share-tg').href = `https://telegram.me/share/url?url=${url}&text=${txt}`;
         }
 
-        // 🟢 ম্যাজিক সেকশন: মুভি লোড একদম আলাদা ট্র্যাকে চলবে, বিজ্ঞাপন পরে আসবে
         window.addEventListener('DOMContentLoaded', () => { 
-            // ১. আগে মুভি সার্ভার থেকে ১ সেকেন্ডে ডেটা নিয়ে আসবে
             loadTrending(); 
 
-            // ২. ব্যাকগ্রাউন্ডে বিজ্ঞাপনগুলো সেফলি লোড করার চেষ্টা করবে (যাতে ব্রাউজার সাইট ব্লক না করে)
+            // সোশ্যাল বার স্ক্রিপ্ট ব্যাকগ্রাউন্ডে সেফলি রান হবে
             setTimeout(() => {
                 try {
-                    // --- ১. ৩২০x৫০ ব্যানার অ্যাড ইনজেক্ট ---
-                    const adContainer = document.getElementById('adBannerBox');
-                    if(adContainer) {
-                        window.atOptions = {
-                            'key' : '629ac74a8365d095d3b2e711824a684c',
-                            'format' : 'iframe',
-                            'height' : 50,
-                            'width' : 320,
-                            'params' : {}
-                        };
-                        const adScript = document.createElement('script');
-                        adScript.src = "https://www.highperformanceformat.com/629ac74a8365d095d3b2e711824a684c/invoke.js";
-                        adContainer.appendChild(adScript);
-                    }
-
-                    // --- ২. পপআন্ডার অ্যাড (Popunder Script) ---
-                    const popunderScript = document.createElement('script');
-                    popunderScript.src = "https://pl29472266.effectivecpmnetwork.com/c9/1c/46/c91c464dee4b553b50a9a1b15c04505e.js";
-                    popunderScript.async = true;
-                    document.body.appendChild(popunderScript);
-
-                    // --- ৩. সোশ্যাল বার অ্যাড (Social Bar Script) ---
                     const socialBarScript = document.createElement('script');
                     socialBarScript.src = "https://pl29481773.effectivecpmnetwork.com/9a/f8/12/9af8120fe740a6c7f0db0f85e7a0ec86.js";
                     socialBarScript.async = true;
                     document.body.appendChild(socialBarScript);
-                    
                 } catch(e) {
-                    console.log("Adblocker active, bypassing smoothly.");
+                    console.log("Social bar injection.");
                 }
-            }, 1200); // মুভি লোড হওয়ার ১.২ সেকেন্ড পর ব্যাকগ্রাউন্ডে রান হবে
+            }, 1500);
         });
     </script>
 </body>
