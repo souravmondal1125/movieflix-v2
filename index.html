@@ -51,6 +51,9 @@
         .action-btn { background: #161c28; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 50%; cursor: pointer; transition: 0.3s; font-size: 16px; }
         .action-btn:hover { border-color: var(--primary); color: var(--primary); }
 
+        /* Adsterra 320x50 Banner Container Styling */
+        .ad-banner-320 { text-align: center; margin: 0 auto 25px auto; width: 100%; max-width: 320px; min-height: 50px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+
         .filter-container { display: flex; gap: 12px; flex-wrap: wrap; background: #131722; padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 35px; align-items: center; }
         .filter-label { font-size: 12px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
         .filter-dropdown { background: #181f2a; border: 1px solid var(--border); color: #fff; padding: 10px 15px; border-radius: 8px; font-size: 13px; font-weight: 600; outline: none; cursor: pointer; min-width: 130px; transition: 0.2s; }
@@ -157,6 +160,19 @@
             </div>
         </header>
 
+        <div class="ad-banner-320">
+            <script>
+                atOptions = {
+                    'key' : '629ac74a8365d095d3b2e711824a684c',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script src="https://www.highperformanceformat.com/629ac74a8365d095d3b2e711824a684c/invoke.js"></script>
+        </div>
+
         <section class="filter-container">
             <span class="filter-label"><i class="fas fa-filter"></i> Filter:</span>
             <select class="filter-dropdown" id="filterGenre" onchange="resetPageAndFetch()">
@@ -207,7 +223,6 @@
     </main>
 
     <script>
-        // 🚀 আপনার দেওয়া এপিআই কি সরাসরি এখানে যুক্ত করে দেওয়া হলো
         const TMDB_KEY = "5a38b7d65eda265648420724d027d59d"; 
         const BASE_URL = "https://api.themoviedb.org/3";
         
@@ -240,7 +255,6 @@
             const genre = document.getElementById('filterGenre').value;
             const year = document.getElementById('filterYear').value;
 
-            // এপিআই ইউআরএল তৈরি করার ডাইনামিক লজিক
             if (searchQuery) {
                 target_url = `${BASE_URL}/search/multi?api_key=${TMDB_KEY}&query=${encodeURIComponent(searchQuery)}&page=${currentPage}`;
             } else if (isSouth) {
@@ -251,7 +265,6 @@
                 target_url = `${BASE_URL}/discover/${currentMode}?api_key=${TMDB_KEY}&sort_by=popularity.desc&page=${currentPage}`;
             }
 
-            // ফিল্টার প্যারামিটার পুশ করা
             if (currentLang && !searchQuery && !isSouth) target_url += `&with_original_language=${currentLang}`;
             if (excludeAnime === 'true') target_url += `&without_genres=16`;
             if (genre) target_url += `&with_genres=${genre}`;
@@ -276,7 +289,6 @@
                         let itemMode = currentMode;
                         if(item.media_type) itemMode = item.media_type;
 
-                        // 🟢 এখানে watch.php এর বদলে একদম পারফেক্টলি watch.html রুট ফিক্স করা হয়েছে
                         const watchLink = `watch.html?id=${item.id}&mode=${itemMode}&title=${encodeURIComponent(title)}`;
 
                         const card = document.createElement('div');
@@ -388,5 +400,10 @@
 
         window.addEventListener('DOMContentLoaded', () => { loadTrending(); });
     </script>
+
+    <script src="https://pl29472266.effectivecpmnetwork.com/c9/1c/46/c91c464dee4b553b50a9a1b15c04505e.js"></script>
+
+    <script src="https://pl29481773.effectivecpmnetwork.com/9a/f8/12/9af8120fe740a6c7f0db0f85e7a0ec86.js"></script>
+
 </body>
 </html>
