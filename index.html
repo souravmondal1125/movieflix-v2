@@ -392,15 +392,15 @@
             document.getElementById('share-tg').href = `https://telegram.me/share/url?url=${url}&text=${txt}`;
         }
 
-        // 🟢 মেইন সল্যুশন: আগে মুভি লোড হবে, তারপর একদম সেফলি ব্যাকগ্রাউন্ডে বিজ্ঞাপন রান করবে
+        // 🟢 ম্যাজিক সেকশন: মুভি লোড একদম আলাদা ট্র্যাকে চলবে, বিজ্ঞাপন পরে আসবে
         window.addEventListener('DOMContentLoaded', () => { 
-            // ১. আগে মুভি সার্ভার থেকে ডেটা নিয়ে আসবে (ইউজার যেন ফাঁকা না দেখে)
+            // ১. আগে মুভি সার্ভার থেকে ১ সেকেন্ডে ডেটা নিয়ে আসবে
             loadTrending(); 
 
-            // ২. মুভি লোড হওয়ার ১ সেকেন্ড পর বিজ্ঞাপনগুলো লোড করার চেষ্টা করবে
+            // ২. ব্যাকগ্রাউন্ডে বিজ্ঞাপনগুলো সেফলি লোড করার চেষ্টা করবে (যাতে ব্রাউজার সাইট ব্লক না করে)
             setTimeout(() => {
                 try {
-                    // ৩২০x৫০ ব্যানার ইনজেক্ট করা
+                    // --- ১. ৩২০x৫০ ব্যানার অ্যাড ইনজেক্ট ---
                     const adContainer = document.getElementById('adBannerBox');
                     if(adContainer) {
                         window.atOptions = {
@@ -415,20 +415,22 @@
                         adContainer.appendChild(adScript);
                     }
 
-                    // পপআন্ডার ও সোশ্যাল বার অ্যাড স্ক্রিপ্ট ব্যাকগ্রাউন্ডে রান করানো
+                    // --- ২. পপআন্ডার অ্যাড (Popunder Script) ---
                     const popunderScript = document.createElement('script');
                     popunderScript.src = "https://pl29472266.effectivecpmnetwork.com/c9/1c/46/c91c464dee4b553b50a9a1b15c04505e.js";
                     popunderScript.async = true;
                     document.body.appendChild(popunderScript);
 
+                    // --- ৩. সোশ্যাল বার অ্যাড (Social Bar Script) ---
                     const socialBarScript = document.createElement('script');
                     socialBarScript.src = "https://pl29481773.effectivecpmnetwork.com/9a/f8/12/9af8120fe740a6c7f0db0f85e7a0ec86.js";
                     socialBarScript.async = true;
                     document.body.appendChild(socialBarScript);
+                    
                 } catch(e) {
-                    console.log("Adblocker active, keeping site clean for user.");
+                    console.log("Adblocker active, bypassing smoothly.");
                 }
-            }, 1000); // ১ সেকেন্ড ডিলে দেওয়া হয়েছে
+            }, 1200); // মুভি লোড হওয়ার ১.২ সেকেন্ড পর ব্যাকগ্রাউন্ডে রান হবে
         });
     </script>
 </body>
